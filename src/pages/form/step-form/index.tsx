@@ -18,10 +18,10 @@ const StepDescriptions: React.FC<{
   const { payAccount, receiverAccount, receiverName, amount } = stepData;
   return (
     <Descriptions column={1} bordered={bordered}>
-      <Descriptions.Item label="付款账户"> {payAccount}</Descriptions.Item>
-      <Descriptions.Item label="收款账户"> {receiverAccount}</Descriptions.Item>
-      <Descriptions.Item label="收款人姓名"> {receiverName}</Descriptions.Item>
-      <Descriptions.Item label="转账金额">
+      <Descriptions.Item label="Payer Account"> {payAccount}</Descriptions.Item>
+      <Descriptions.Item label="Receiver Account"> {receiverAccount}</Descriptions.Item>
+      <Descriptions.Item label="Receiver Name"> {receiverName}</Descriptions.Item>
+      <Descriptions.Item label="Transfer Amount">
         <Statistic
           value={amount}
           suffix={
@@ -30,7 +30,7 @@ const StepDescriptions: React.FC<{
                 fontSize: 14,
               }}
             >
-              元
+              Yuan
             </span>
           }
           precision={2}
@@ -47,14 +47,14 @@ const StepResult: React.FC<{
   return (
     <Result
       status="success"
-      title="操作成功"
-      subTitle="预计两小时内到账"
+      title="Operation Successful"
+      subTitle="Expected to arrive within two hours"
       extra={
         <>
           <Button type="primary" onClick={props.onFinish}>
-            再转一笔
+            Transfer Again
           </Button>
-          <Button>查看账单</Button>
+          <Button>View Bill</Button>
         </>
       }
       className={styles.result}
@@ -75,7 +75,7 @@ const StepForm: React.FC<Record<string, any>> = () => {
   const [current, setCurrent] = useState(0);
   const formRef = useRef<FormInstance>();
   return (
-    <PageContainer content="将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。">
+    <PageContainer content="Divide a long or unfamiliar form task into multiple steps to guide users to complete it.">
       <Card bordered={false}>
         <StepsForm
           current={current}
@@ -91,7 +91,7 @@ const StepForm: React.FC<Record<string, any>> = () => {
         >
           <StepsForm.StepForm<StepDataType>
             formRef={formRef}
-            title="填写转账信息"
+            title="Fill in Transfer Information"
             initialValues={stepData}
             onFinish={async (values) => {
               setStepData(values);
@@ -99,13 +99,13 @@ const StepForm: React.FC<Record<string, any>> = () => {
             }}
           >
             <ProFormSelect
-              label="付款账户"
+              label="Payer Account"
               width="md"
               name="payAccount"
               rules={[
                 {
                   required: true,
-                  message: '请选择付款账户',
+                  message: 'Please select the payer account',
                 },
               ]}
               valueEnum={{
@@ -113,18 +113,18 @@ const StepForm: React.FC<Record<string, any>> = () => {
               }}
             />
 
-            <ProForm.Group title="收款账户" size={8}>
+            <ProForm.Group title="Receiver Account" size={8}>
               <ProFormSelect
                 name="receiverMode"
                 rules={[
                   {
                     required: true,
-                    message: '请选择付款账户',
+                    message: 'Please select the receiver account',
                   },
                 ]}
                 valueEnum={{
-                  alipay: '支付宝',
-                  bank: '银行账户',
+                  alipay: 'Alipay',
+                  bank: 'Bank Account',
                 }}
               />
               <ProFormText
@@ -132,55 +132,55 @@ const StepForm: React.FC<Record<string, any>> = () => {
                 rules={[
                   {
                     required: true,
-                    message: '请输入收款人账户',
+                    message: 'Please enter the receiver account',
                   },
                   {
                     type: 'email',
-                    message: '账户名应为邮箱格式',
+                    message: 'Account name should be in email format',
                   },
                 ]}
                 placeholder="test@example.com"
               />
             </ProForm.Group>
             <ProFormText
-              label="收款人姓名"
+              label="Receiver Name"
               width="md"
               name="receiverName"
               rules={[
                 {
                   required: true,
-                  message: '请输入收款人姓名',
+                  message: 'Please enter the receiver name',
                 },
               ]}
-              placeholder="请输入收款人姓名"
+              placeholder="Please enter the receiver name"
             />
             <ProFormDigit
-              label="转账金额"
+              label="Transfer Amount"
               name="amount"
               width="md"
               rules={[
                 {
                   required: true,
-                  message: '请输入转账金额',
+                  message: 'Please enter the transfer amount',
                 },
                 {
                   pattern: /^(\d+)((?:\.\d+)?)$/,
-                  message: '请输入合法金额数字',
+                  message: 'Please enter a valid amount',
                 },
               ]}
-              placeholder="请输入金额"
+              placeholder="Please enter the amount"
               fieldProps={{
                 prefix: '￥',
               }}
             />
           </StepsForm.StepForm>
 
-          <StepsForm.StepForm title="确认转账信息">
+          <StepsForm.StepForm title="Confirm Transfer Information">
             <div className={styles.result}>
               <Alert
                 closable
                 showIcon
-                message="确认转账后，资金将直接打入对方账户，无法退回。"
+                message="After confirming the transfer, the funds will be directly deposited into the recipient's account and cannot be refunded."
                 style={{
                   marginBottom: 24,
                 }}
@@ -192,20 +192,20 @@ const StepForm: React.FC<Record<string, any>> = () => {
                 }}
               />
               <ProFormText.Password
-                label="支付密码"
+                label="Payment Password"
                 width="md"
                 name="password"
                 required={false}
                 rules={[
                   {
                     required: true,
-                    message: '需要支付密码才能进行支付',
+                    message: 'Payment password is required for payment',
                   },
                 ]}
               />
             </div>
           </StepsForm.StepForm>
-          <StepsForm.StepForm title="完成">
+          <StepsForm.StepForm title="Complete">
             <StepResult
               onFinish={async () => {
                 setCurrent(0);
@@ -222,14 +222,18 @@ const StepForm: React.FC<Record<string, any>> = () => {
           }}
         />
         <div>
-          <h3>说明</h3>
-          <h4>转账到支付宝账户</h4>
+          <h3>Instructions</h3>
+          <h4>Transfer to Alipay Account</h4>
           <p>
-            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
+            If necessary, you can put some common questions about the product here. If necessary,
+            you can put some common questions about the product here. If necessary, you can put some
+            common questions about the product here.
           </p>
-          <h4>转账到银行卡</h4>
+          <h4>Transfer to Bank Account</h4>
           <p>
-            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
+            If necessary, you can put some common questions about the product here. If necessary,
+            you can put some common questions about the product here. If necessary, you can put some
+            common questions about the product here.
           </p>
         </div>
       </Card>

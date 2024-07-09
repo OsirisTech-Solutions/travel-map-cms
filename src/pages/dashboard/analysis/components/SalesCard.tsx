@@ -1,10 +1,10 @@
 import { Column } from '@ant-design/plots';
 import { Card, Col, DatePicker, Row, Tabs } from 'antd';
+import { RangePickerProps } from 'antd/es/date-picker/generatePicker/interface';
 import type dayjs from 'dayjs';
 import numeral from 'numeral';
 import type { DataItem } from '../data.d';
 import useStyles from '../style.style';
-import { RangePickerProps } from 'antd/es/date-picker/generatePicker/interface';
 
 export type TimeType = 'today' | 'week' | 'month' | 'year';
 const { RangePicker } = DatePicker;
@@ -16,7 +16,7 @@ const rankingListData: {
 
 for (let i = 0; i < 7; i += 1) {
   rankingListData.push({
-    title: `工专路 ${i} 号店`,
+    title: `Store ${i}`,
     total: 323234,
   });
 }
@@ -38,29 +38,23 @@ const SalesCard = ({
 }) => {
   const { styles } = useStyles();
   return (
-    <Card
-      loading={loading}
-      bordered={false}
-      bodyStyle={{
-        padding: 0,
-      }}
-    >
+    <Card loading={loading} bordered={false} styles={{ body: { padding: 0 } }}>
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
             <div className={styles.salesExtraWrap}>
               <div className={styles.salesExtra}>
                 <a className={isActive('today')} onClick={() => selectDate('today')}>
-                  今日
+                  Today
                 </a>
                 <a className={isActive('week')} onClick={() => selectDate('week')}>
-                  本周
+                  This Week
                 </a>
                 <a className={isActive('month')} onClick={() => selectDate('month')}>
-                  本月
+                  This Month
                 </a>
                 <a className={isActive('year')} onClick={() => selectDate('year')}>
-                  本年
+                  This Year
                 </a>
               </div>
               <RangePicker
@@ -79,7 +73,7 @@ const SalesCard = ({
           items={[
             {
               key: 'sales',
-              label: '销售额',
+              label: 'Sales',
               children: (
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
@@ -104,7 +98,7 @@ const SalesCard = ({
                           x: { paddingInner: 0.4 },
                         }}
                         tooltip={{
-                          name: '销售量',
+                          name: 'Sales',
                           channel: 'y',
                         }}
                       />
@@ -112,7 +106,7 @@ const SalesCard = ({
                   </Col>
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店销售额排名</h4>
+                      <h4 className={styles.rankingTitle}>Store Sales Ranking</h4>
                       <ul className={styles.rankingList}>
                         {rankingListData.map((item, i) => (
                           <li key={item.title}>
@@ -137,7 +131,7 @@ const SalesCard = ({
             },
             {
               key: 'views',
-              label: '访问量',
+              label: 'Views',
               children: (
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
@@ -160,7 +154,7 @@ const SalesCard = ({
                           x: { paddingInner: 0.4 },
                         }}
                         tooltip={{
-                          name: '访问量',
+                          name: 'Views',
                           channel: 'y',
                         }}
                       />
@@ -168,7 +162,7 @@ const SalesCard = ({
                   </Col>
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店访问量排名</h4>
+                      <h4 className={styles.rankingTitle}>Store Views Ranking</h4>
                       <ul className={styles.rankingList}>
                         {rankingListData.map((item, i) => (
                           <li key={item.title}>

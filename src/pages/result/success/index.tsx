@@ -15,7 +15,7 @@ export default () => {
           margin: '8px 0 4px',
         }}
       >
-        <span>曲丽丽</span>
+        <span>Lily Qu</span>
         <DingdingOutlined
           style={{
             marginLeft: 8,
@@ -38,7 +38,7 @@ export default () => {
           margin: '8px 0 4px',
         }}
       >
-        <span>周毛毛</span>
+        <span>Mao Mao Zhou</span>
         <a href="">
           <DingdingOutlined
             style={{
@@ -46,17 +46,17 @@ export default () => {
               marginLeft: 8,
             }}
           />
-          <span>催一下</span>
+          <span>Remind</span>
         </a>
       </div>
     </div>
   );
   const content = (
     <>
-      <Descriptions title="项目名称">
-        <Descriptions.Item label="项目 ID">23421</Descriptions.Item>
-        <Descriptions.Item label="负责人">曲丽丽</Descriptions.Item>
-        <Descriptions.Item label="生效时间">2016-12-12 ~ 2017-12-12</Descriptions.Item>
+      <Descriptions title="Project Name">
+        <Descriptions.Item label="Project ID">23421</Descriptions.Item>
+        <Descriptions.Item label="Owner">Lily Qu</Descriptions.Item>
+        <Descriptions.Item label="Effective Time">2016-12-12 ~ 2017-12-12</Descriptions.Item>
       </Descriptions>
       <br />
       <Steps progressDot current={1}>
@@ -67,7 +67,7 @@ export default () => {
                 fontSize: 14,
               }}
             >
-              创建项目
+              Create Project
             </span>
           }
           description={desc1}
@@ -79,7 +79,7 @@ export default () => {
                 fontSize: 14,
               }}
             >
-              部门初审
+              Department Review
             </span>
           }
           description={desc2}
@@ -91,7 +91,7 @@ export default () => {
                 fontSize: 14,
               }}
             >
-              财务复核
+              Financial Review
             </span>
           }
         />
@@ -102,7 +102,7 @@ export default () => {
                 fontSize: 14,
               }}
             >
-              完成
+              Complete
             </span>
           }
         />
@@ -111,9 +111,9 @@ export default () => {
   );
   const extra = (
     <Fragment>
-      <Button type="primary">返回列表</Button>
-      <Button>查看项目</Button>
-      <Button>打印</Button>
+      <Button type="primary">Back to List</Button>
+      <Button>View Project</Button>
+      <Button>Print</Button>
     </Fragment>
   );
   return (
@@ -121,8 +121,8 @@ export default () => {
       <Card bordered={false}>
         <Result
           status="success"
-          title="提交成功"
-          subTitle="提交结果页用于反馈一系列操作任务的处理结果， 如果仅是简单操作，使用 Message 全局提示反馈即可。 本文字区域可以展示简单的补充说明，如果有类似展示 “单据”的需求，下面这个灰色区域可以呈现比较复杂的内容。"
+          title="Submission Successful"
+          subTitle="The submission result page is used to provide feedback on the processing results of a series of operation tasks. If it is a simple operation, use the Message global prompt for feedback. This text area can display simple supplementary explanations. If there is a requirement to display 'documents' or similar, the gray area below can present more complex content."
           extra={extra}
           style={{
             marginBottom: 16,
