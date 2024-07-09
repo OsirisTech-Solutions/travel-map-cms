@@ -2,7 +2,6 @@ import { EllipsisOutlined } from '@ant-design/icons';
 import { GridContent } from '@ant-design/pro-components';
 import { useRequest } from '@umijs/max';
 import { Col, Dropdown, Row } from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker/generatePicker';
 import type { RadioChangeEvent } from 'antd/es/radio';
 import type dayjs from 'dayjs';
 import type { FC } from 'react';
@@ -18,6 +17,7 @@ import type { AnalysisData } from './data.d';
 import { fakeChartData } from './service';
 import useStyles from './style.style';
 import { getTimeDistance } from './utils/utils';
+import { RangePickerProps } from 'antd/es/date-picker/generatePicker/interface';
 type RangePickerValue = RangePickerProps<dayjs.Dayjs>['value'];
 type AnalysisProps = {
   dashboardAndanalysis: AnalysisData;
@@ -31,7 +31,7 @@ const Analysis: FC<AnalysisProps> = () => {
   const [rangePickerValue, setRangePickerValue] = useState<RangePickerValue>(
     getTimeDistance('year'),
   );
-  const { loading, data } = useRequest(fakeChartData);
+  const { loading, data,  } = useRequest(fakeChartData);
   const selectDate = (type: TimeType) => {
     setRangePickerValue(getTimeDistance(type));
   };

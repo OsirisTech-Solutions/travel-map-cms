@@ -1,10 +1,10 @@
 import { Column } from '@ant-design/plots';
 import { Card, Col, DatePicker, Row, Tabs } from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker/generatePicker';
 import type dayjs from 'dayjs';
 import numeral from 'numeral';
 import type { DataItem } from '../data.d';
 import useStyles from '../style.style';
+import { RangePickerProps } from 'antd/es/date-picker/generatePicker/interface';
 
 export type TimeType = 'today' | 'week' | 'month' | 'year';
 const { RangePicker } = DatePicker;
