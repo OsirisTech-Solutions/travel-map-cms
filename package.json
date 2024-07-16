@@ -44,9 +44,11 @@
     "@antv/l7": "^2.20.13",
     "@antv/l7-maps": "^2.20.13",
     "@antv/l7-react": "^2.4.3",
+    "@reduxjs/toolkit": "^2.2.6",
     "@umijs/route-utils": "^2.2.2",
     "antd": "^5.12.7",
     "antd-style": "^3.6.1",
+    "async-mutex": "^0.5.0",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.10",
     "numeral": "^2.0.6",
@@ -55,7 +57,8 @@
     "rc-util": "^5.38.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-fittext": "^1.0.0"
+    "react-fittext": "^1.0.0",
+    "react-redux": "^9.1.2"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.1.5",
