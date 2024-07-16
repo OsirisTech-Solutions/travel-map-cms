@@ -42,12 +42,12 @@ export const popState = (url: string) => {
 }
 
 export const showError = (error: any) => {
-  if (REACT_APP_ENV === 'dev') {
+  if (process.env.NODE_ENV === 'dev') {
     Modal.error({
       title: 'Đã có lỗi xảy ra. VUI LÒNG CHỤP ẢNH LẠI và gửi cho dev nhé ❤',
-      content: JSON.stringify(error?.graphQLErrors?.[0])
+      content: JSON.stringify(error)
     })
   } else {
-    message.error(error?.graphQLErrors?.[0]?.message || 'Đã có lỗi xảy ra!')
+    message.error('Đã có lỗi xảy ra!')
   }
 }

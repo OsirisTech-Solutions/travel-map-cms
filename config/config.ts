@@ -2,7 +2,6 @@
 import { defineConfig } from '@umijs/max';
 import { join } from 'path';
 import defaultSettings from './defaultSettings';
-import proxy from './proxy';
 
 import routes from './routes';
 
@@ -55,7 +54,7 @@ export default defineConfig({
    * @doc Proxy introduction https://umijs.org/docs/guides/proxy
    * @doc Proxy configuration https://umijs.org/docs/api/config#proxy
    */
-  proxy: proxy[REACT_APP_ENV as keyof typeof proxy],
+  // proxy: proxy[REACT_APP_ENV as keyof typeof proxy],
   /**
    * @name Fast refresh configuration
    * @description A nice hot-reloading component that preserves state during updates.

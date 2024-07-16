@@ -1,7 +1,7 @@
 import { configUmiAlias, createConfig } from '@umijs/max/test';
-
+import { Config } from '@jest/types';
 export default async () => {
-  const config = await configUmiAlias({
+  const config: Config.InitialOptions = await configUmiAlias({
     ...createConfig({
       target: 'browser',
     }),

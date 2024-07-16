@@ -67,38 +67,36 @@ const Login: React.FC = () => {
   const intl = useIntl();
 
   const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
+    // const userInfo = await initialState?.fetchUserInfo?.();
+    if (true) {
       flushSync(() => {
+        localStorage.setItem('token', '123');
         setInitialState((s) => ({
           ...s,
-          currentUser: userInfo,
+          currentUser: {
+            name: 'Serati Ma',
+            avatar: 'https://avatars1.githubusercontent.com/u/8186664?s=60&v=4',
+            userid: '00000001',
+            email: ''},
         }));
       });
     }
   };
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: {username: string, password: string}) => {
     console.log("🚀 ~ handleSubmit ~ values:", values)
     try {
-      if (true) {
-        const defaultLoginSuccessMessage = intl.formatMessage({
-          id: 'pages.login.success',
-          defaultMessage: '登录成功！',
-        });
-        message.success(defaultLoginSuccessMessage);
+      if (values.username === 'admin' && values.password === 'ant.design') {
+        message.success('Đăng nhập thành công');
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         window.location.href = urlParams.get('redirect') || '/';
         return;
       }
+      throw new Error('');
     } catch (error) {
-      const defaultLoginFailureMessage = intl.formatMessage({
-        id: 'pages.login.failure',
-        defaultMessage: '登录失败，请重试！',
-      });
       console.log(error);
-      message.error(defaultLoginFailureMessage);
+      message.error('Đăng nhập thất bại');
     }
   };
 
