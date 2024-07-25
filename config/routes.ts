@@ -1,13 +1,15 @@
-﻿/**
- * @name umi 的路由配置
- * @description 只支持 path,component,routes,redirect,wrappers,name,icon 的配置
- * @param path  path 只支持两种占位符配置，第一种是动态参数 :id 的形式，第二种是 * 通配符，通配符只能出现路由字符串的最后。
- * @param component 配置 location 和 path 匹配后用于渲染的 React 组件路径。可以是绝对路径，也可以是相对路径，如果是相对路径，会从 src/pages 开始找起。
- * @param routes 配置子路由，通常在需要为多个路径增加 layout 组件时使用。
- * @param redirect 配置路由跳转
- * @param wrappers 配置路由组件的包装组件，通过包装组件可以为当前的路由组件组合进更多的功能。 比如，可以用于路由级别的权限校验
- * @param name 配置路由的标题，默认读取国际化文件 menu.ts 中 menu.xxxx 的值，如配置 name 为 login，则读取 menu.ts 中 menu.login 的取值作为标题
- * @param icon 配置路由的图标，取值参考 https://ant.design/components/icon-cn， 注意去除风格后缀和大小写，如想要配置图标为 <StepBackwardOutlined /> 则取值应为 stepBackward 或 StepBackward，如想要配置图标为 <UserOutlined /> 则取值应为 user 或者 User
+﻿import { layout } from "@/app";
+
+/**
+ * @name Umi route configuration
+ * @description Only supports configuration of path, component, routes, redirect, wrappers, name, and icon.
+ * @param path Path only supports two placeholder configurations. The first is the dynamic parameter in the form of :id, and the second is the * wildcard, which can only appear at the end of the route string.
+ * @param component Configuration of the React component path used for rendering after location and path matching. It can be an absolute path or a relative path. If it is a relative path, it will start from src/pages.
+ * @param routes Configure sub-routes, usually used when you need to add a layout component for multiple paths.
+ * @param redirect Configure route redirection.
+ * @param wrappers Configure the wrapping component of the route component. Through the wrapping component, more functionality can be combined into the current route component. For example, it can be used for route-level permission verification.
+ * @param name Configure the title of the route. By default, it reads the value of menu.ts in the internationalization file menu.xxxx. For example, if the name is set to login, it reads the value of menu.login in menu.ts as the title.
+ * @param icon Configure the icon of the route. Refer to https://ant.design/components/icon-cn for the value. Note that the style suffix and case should be removed. For example, if you want to configure the icon as <StepBackwardOutlined />, the value should be stepBackward or StepBackward. If you want to configure the icon as <UserOutlined />, the value should be user or User.
  * @doc https://umijs.org/docs/guides/routes
  */
 export default [
@@ -26,112 +28,110 @@ export default [
         redirect: '/user/login',
       },
       {
-        name: 'register-result',
-        icon: 'smile',
-        path: '/user/register-result',
-        component: './user/register-result',
-      },
-      {
-        name: 'register',
-        icon: 'smile',
-        path: '/user/register',
-        component: './user/register',
-      },
-      {
         component: '404',
         path: '/user/*',
       },
     ],
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    icon: 'dashboard',
+    path: '/',
+    layout: false,
+    component: '@/layouts/BasicLayout',
     routes: [
       {
         path: '/dashboard',
-        redirect: '/dashboard/analysis',
+        name: 'dashboard',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/dashboard',
+            redirect: '/dashboard/analysis',
+          },
+          {
+            name: 'analysis',
+            icon: 'smile',
+            path: '/dashboard/analysis',
+            component: './dashboard/analysis',
+            wrappers: [
+              '@/wrappers/auth',
+            ],
+          },
+        ],
       },
-      {
-        name: 'analysis',
-        icon: 'smile',
-        path: '/dashboard/analysis',
-        component: './dashboard/analysis',
-      },
-    ],
-  },
-  {
-    path: '/form',
-    icon: 'form',
-    name: 'form',
-    routes: [
       {
         path: '/form',
-        redirect: '/form/step-form',
+        icon: 'form',
+        name: 'form',
+        routes: [
+          {
+            path: '/form',
+            redirect: '/form/step-form',
+          },
+          {
+            name: 'step-form',
+            icon: 'smile',
+            path: '/form/step-form',
+            component: './form/step-form',
+          },
+        ],
       },
       {
-        name: 'step-form',
-        icon: 'smile',
-        path: '/form/step-form',
-        component: './form/step-form',
-      },
-    ],
-  },
-  {
-    name: 'result',
-    icon: 'CheckCircleOutlined',
-    path: '/result',
-    routes: [
-      {
+        name: 'result',
+        icon: 'CheckCircleOutlined',
         path: '/result',
-        redirect: '/result/success',
+        routes: [
+          {
+            path: '/result',
+            redirect: '/result/success',
+          },
+          {
+            name: 'success',
+            icon: 'smile',
+            path: '/result/success',
+            component: './result/success',
+          },
+          {
+            name: 'fail',
+            icon: 'smile',
+            path: '/result/fail',
+            component: './result/fail',
+          },
+        ],
       },
       {
-        name: 'success',
-        icon: 'smile',
-        path: '/result/success',
-        component: './result/success',
-      },
-      {
-        name: 'fail',
-        icon: 'smile',
-        path: '/result/fail',
-        component: './result/fail',
-      },
-    ],
-  },
-  {
-    name: 'exception',
-    icon: 'warning',
-    path: '/exception',
-    routes: [
-      {
+        name: 'exception',
+        icon: 'warning',
         path: '/exception',
-        redirect: '/exception/403',
+        routes: [
+          {
+            path: '/exception',
+            redirect: '/exception/403',
+          },
+          {
+            name: '403',
+            icon: 'smile',
+            path: '/exception/403',
+            component: './exception/403',
+          },
+          {
+            name: '404',
+            icon: 'smile',
+            path: '/exception/404',
+            component: './exception/404',
+          },
+          {
+            name: '500',
+            icon: 'smile',
+            path: '/exception/500',
+            component: './exception/500',
+          },
+        ],
       },
       {
-        name: '403',
-        icon: 'smile',
-        path: '/exception/403',
-        component: './exception/403',
-      },
-      {
-        name: '404',
-        icon: 'smile',
-        path: '/exception/404',
-        component: './exception/404',
-      },
-      {
-        name: '500',
-        icon: 'smile',
-        path: '/exception/500',
-        component: './exception/500',
+        path: '/',
+        redirect: '/dashboard/analysis',
       },
     ],
-  },
-  {
-    path: '/',
-    redirect: '/dashboard/analysis',
   },
   {
     component: '404',

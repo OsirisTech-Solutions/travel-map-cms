@@ -1,0 +1,37 @@
+// @ts-nocheck
+import React from 'react';
+import { history, type IRoute } from '@umijs/max';
+import { Result, Button } from 'antd';
+
+const Exception: React.FC<{
+  children: React.ReactNode;
+  route?: IRoute;
+  notFound?: React.ReactNode;
+  noAccessible?: React.ReactNode;
+  unAccessible?: React.ReactNode;
+  noFound?: React.ReactNode;
+}> = (props) => (
+  // render custom 404
+  (!props.route && (props.noFound || props.notFound)) ||
+
+
+  // render custom 403
+  (props.route?.unaccessible && (props.unAccessible || props.noAccessible)) ||
+  // render default exception
+  ((!props.route || props.route?.unaccessible) && (
+    <Result
+      status={props.route ? '403' : '404'}
+      title={props.route ? '403' : '404'}
+      subTitle={props.route ? 'Sorry, you do not have permission to access this page' : 'Sorry, the page you visited does not exist'}
+      extra={
+        <Button type="primary" onClick={() => history.push('/')}>
+          Back to Home
+        </Button>
+      }
+    />
+  )) ||
+  // normal render
+  props.children
+);
+
+export default Exception;

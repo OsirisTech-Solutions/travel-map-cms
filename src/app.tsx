@@ -54,7 +54,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       
       title: <AvatarName />,
       render: (_, avatarChildren) => {
-        console.log("🚀 ~ avatarChildren:", avatarChildren)
         return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
       },
     },
