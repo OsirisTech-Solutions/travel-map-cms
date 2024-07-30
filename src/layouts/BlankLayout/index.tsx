@@ -1,10 +1,11 @@
-import {store} from '@/redux/store'
-import {FC} from 'react'
-import {Provider} from 'react-redux'
+import { store } from '@/redux/store'
+import { Outlet } from '@umijs/max'
+import { FC } from 'react'
+import { Provider } from 'react-redux'
 
-const BlankLayout: FC<{children: React.ReactNode}>  = ({children}) => <>
+const BlankLayout: FC = () => <>
   <Provider store={store}>
-    {children}
+    <Outlet />
   </Provider>
 </>
 

@@ -13,6 +13,9 @@ import Exception from '@/components/Exception';
 import userConfig from '../../../config/defaultSettings';
 import { ProLayout } from '@ant-design/pro-components';
 
+enum KeyLayout {
+  MAIN = 'main',
+}
 // Filter out the routes that need to be displayed, where filterFn refers to the levels that should not be displayed
 const filterRoutes = (routes: IRoute[], filterFn: (route: IRoute) => boolean) => {
   console.log("🚀 ~ filterRoutes ~ routes:", routes)
@@ -67,6 +70,7 @@ export default (props: any) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { clientRoutes, pluginManager } = useAppData();
+  console.log("🚀 ~ clientRoutes:", clientRoutes)
   const initialInfo = (useModel && useModel('@@initialState')) || {
     initialState: undefined,
     loading: false,
@@ -85,7 +89,11 @@ export default (props: any) => {
 
   // The current implementation of layout and wrapper is achieved through parent routes, which leads to redundant levels in the route data.
   // When consumed by proLayout, the menu cannot be displayed correctly. Here, we filter out the redundant data. 
-  const newRoutes = filterRoutes([clientRoutes.find((item) => item.path === '/')], (route) => {
+  const routesForMenu = clientRoutes
+  .find((route) => route.path === '/').routes
+  .find((item) => item?.key === KeyLayout.MAIN)
+  console.log("🚀 ~ routesForMenu:", routesForMenu)
+  const newRoutes = filterRoutes([routesForMenu], (route) => {
     return !!route.isLayout || !!route.isWrapper;
   })
   const [route] = useAccessMarkedRoutes(mapRoutes(newRoutes));
