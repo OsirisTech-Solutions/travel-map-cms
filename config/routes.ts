@@ -1,4 +1,6 @@
-﻿/**
+﻿import routes from './routes/index';
+
+/**
  * @name Umi route configuration
  * @description Only supports configuration of path, component, routes, redirect, wrappers, name, and icon.
  * @param path Path only supports two placeholder configurations. The first is the dynamic parameter in the form of :id, and the second is the * wildcard, which can only appear at the end of the route string.
@@ -60,6 +62,8 @@ export default [
               },
             ],
           },
+          // places management
+          routes.places,
           {
             path: '/form',
             icon: 'form',
