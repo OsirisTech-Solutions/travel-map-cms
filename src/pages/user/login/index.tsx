@@ -1,13 +1,6 @@
 import { Footer } from '@/components';
-import {
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import {
-  LoginForm,
-  ProFormCheckbox,
-  ProFormText,
-} from '@ant-design/pro-components';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { FormattedMessage, Helmet, SelectLang, useIntl, useModel } from '@umijs/max';
 import { message } from 'antd';
 import { createStyles } from 'antd-style';
@@ -55,7 +48,10 @@ const Lang = () => {
   const { styles } = useStyles();
 
   return (
-    <div className={styles.lang} data-lang>
+    <div
+      className={styles.lang}
+      data-lang
+    >
       {SelectLang && <SelectLang />}
     </div>
   );
@@ -77,14 +73,14 @@ const Login: React.FC = () => {
             name: 'Serati Ma',
             avatar: 'https://avatars1.githubusercontent.com/u/8186664?s=60&v=4',
             userid: '00000001',
-            email: ''},
+            email: '',
+          },
         }));
       });
     }
   };
 
-  const handleSubmit = async (values: {username: string, password: string}) => {
-    console.log("🚀 ~ handleSubmit ~ values:", values)
+  const handleSubmit = async (values: { username: string; password: string }) => {
     try {
       if (values.username === 'admin' && values.password === 'ant.design') {
         message.success('Đăng nhập thành công');
@@ -123,7 +119,12 @@ const Login: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" src="/logo.svg" />}
+          logo={
+            <img
+              alt="logo"
+              src="/logo.svg"
+            />
+          }
           title="Ant Design"
           subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
           initialValues={{
@@ -133,66 +134,67 @@ const Login: React.FC = () => {
             await handleSubmit(values as any);
           }}
         >
-            <>
-              <ProFormText
-                name="username"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <UserOutlined />,
-                }}
-                // placeholder={intl.formatMessage({
-                //   id: 'pages.login.username.placeholder',
-                //   defaultMessage: 'Username: Admin',
-                // })}
-                placeholder={"Username: Admin"}
-                rules={[
-                  {
-                    required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.username.required"
-                      />
-                    ),
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined />,
-                }}
-                // placeholder={intl.formatMessage({
-                //   id: 'pages.login.password.placeholder',
-                //   defaultMessage: 'Password: ant.design',
-                // })}
-                placeholder={"Password: ant.design"}
-                rules={[
-                  {
-                    required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.password.required"
-                      />
-                    ),
-                  },
-                ]}
-              />
-            </>
+          <>
+            <ProFormText
+              name="username"
+              fieldProps={{
+                size: 'large',
+                prefix: <UserOutlined />,
+              }}
+              // placeholder={intl.formatMessage({
+              //   id: 'pages.login.username.placeholder',
+              //   defaultMessage: 'Username: Admin',
+              // })}
+              placeholder={'Username: Admin'}
+              rules={[
+                {
+                  required: true,
+                  message: <FormattedMessage id="pages.login.username.required" />,
+                },
+              ]}
+            />
+            <ProFormText.Password
+              name="password"
+              fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined />,
+              }}
+              // placeholder={intl.formatMessage({
+              //   id: 'pages.login.password.placeholder',
+              //   defaultMessage: 'Password: ant.design',
+              // })}
+              placeholder={'Password: ant.design'}
+              rules={[
+                {
+                  required: true,
+                  message: <FormattedMessage id="pages.login.password.required" />,
+                },
+              ]}
+            />
+          </>
           <div
             style={{
               marginBottom: 24,
             }}
           >
-            <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
+            <ProFormCheckbox
+              noStyle
+              name="autoLogin"
+            >
+              <FormattedMessage
+                id="pages.login.rememberMe"
+                defaultMessage="自动登录"
+              />
             </ProFormCheckbox>
             <a
               style={{
                 float: 'right',
               }}
             >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
+              <FormattedMessage
+                id="pages.login.forgotPassword"
+                defaultMessage="忘记密码"
+              />
             </a>
           </div>
         </LoginForm>

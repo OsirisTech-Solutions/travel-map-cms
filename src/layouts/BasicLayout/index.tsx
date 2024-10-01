@@ -1,34 +1,38 @@
 // @ts-nocheck
 
-import {
-  Link, useLocation, useNavigate, Outlet, useAppData, matchRoutes,
-  type IRoute,
-  useModel,
-  useIntl,
-  useAccessMarkedRoutes
-} from '@umijs/max';
-import React, { useMemo } from 'react';
-import Logo from '../../../public/icons/icon-128x128.png';
 import Exception from '@/components/Exception';
-import userConfig from '../../../config/defaultSettings';
 import { ProLayout } from '@ant-design/pro-components';
+import {
+  Link,
+  matchRoutes,
+  Outlet,
+  useAccessMarkedRoutes,
+  useAppData,
+  useIntl,
+  useLocation,
+  useModel,
+  useNavigate,
+  type IRoute,
+} from '@umijs/max';
+import { useMemo } from 'react';
+import userConfig from '../../../config/defaultSettings';
+import Logo from '../../../public/icons/icon-128x128.png';
 
 enum KeyLayout {
   MAIN = 'main',
 }
 // Filter out the routes that need to be displayed, where filterFn refers to the levels that should not be displayed
 const filterRoutes = (routes: IRoute[], filterFn: (route: IRoute) => boolean) => {
-  console.log("🚀 ~ filterRoutes ~ routes:", routes)
   if (routes.length === 0) {
-    return []
+    return [];
   }
 
-  let newRoutes = []
+  let newRoutes = [];
   for (const route of routes) {
     const newRoute = { ...route };
     if (filterFn(route)) {
       if (Array.isArray(newRoute.routes)) {
-        newRoutes.push(...filterRoutes(newRoute.routes, filterFn))
+        newRoutes.push(...filterRoutes(newRoute.routes, filterFn));
       }
     } else {
       if (Array.isArray(newRoute.children)) {
@@ -40,18 +44,18 @@ const filterRoutes = (routes: IRoute[], filterFn: (route: IRoute) => boolean) =>
   }
 
   return newRoutes;
-}
+};
 
 // Format the routes to handle inconsistent menu paths caused by wrappers
 const mapRoutes = (routes: IRoute[]) => {
   if (routes.length === 0) {
-    return []
+    return [];
   }
-  return routes.map(route => {
+  return routes.map((route) => {
     // Need to make a copy, otherwise it will contaminate the original data
-    const newRoute = { ...route }
+    const newRoute = { ...route };
     if (route.originPath) {
-      newRoute.path = route.originPath
+      newRoute.path = route.originPath;
     }
 
     if (Array.isArray(route.routes)) {
@@ -62,15 +66,14 @@ const mapRoutes = (routes: IRoute[]) => {
       newRoute.children = mapRoutes(route.children);
     }
 
-    return newRoute
-  })
-}
+    return newRoute;
+  });
+};
 
 export default (props: any) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { clientRoutes, pluginManager } = useAppData();
-  console.log("🚀 ~ clientRoutes:", clientRoutes)
   const initialInfo = (useModel && useModel('@@initialState')) || {
     initialState: undefined,
     loading: false,
@@ -82,23 +85,24 @@ export default (props: any) => {
     key: 'layout',
     type: 'modify',
     initialValue: {
-      ...initialInfo
+      ...initialInfo,
     },
   });
-  console.log("🚀 ~ runtimeConfig:", runtimeConfig)
 
   // The current implementation of layout and wrapper is achieved through parent routes, which leads to redundant levels in the route data.
-  // When consumed by proLayout, the menu cannot be displayed correctly. Here, we filter out the redundant data. 
+  // When consumed by proLayout, the menu cannot be displayed correctly. Here, we filter out the redundant data.
   const routesForMenu = clientRoutes
-  .find((route) => route.path === '/').routes
-  .find((item) => item?.key === KeyLayout.MAIN)
-  console.log("🚀 ~ routesForMenu:", routesForMenu)
+    .find((route) => route.path === '/')
+    .routes.find((item) => item?.key === KeyLayout.MAIN);
   const newRoutes = filterRoutes([routesForMenu], (route) => {
     return !!route.isLayout || !!route.isWrapper;
-  })
+  });
   const [route] = useAccessMarkedRoutes(mapRoutes(newRoutes));
 
-  const matchedRoute = useMemo(() => matchRoutes(route.children, location.pathname)?.pop?.()?.route, [location.pathname]);
+  const matchedRoute = useMemo(
+    () => matchRoutes(route.children, location.pathname)?.pop?.()?.route,
+    [location.pathname],
+  );
 
   return (
     <ProLayout
@@ -122,7 +126,10 @@ export default (props: any) => {
         if (menuItemProps.path && location.pathname !== menuItemProps.path) {
           return (
             // handle wildcard route path, for example /slave/* from qiankun
-            <Link to={menuItemProps.path.replace('/*', '')} target={menuItemProps.target}>
+            <Link
+              to={menuItemProps.path.replace('/*', '')}
+              target={menuItemProps.target}
+            >
               {defaultDom}
             </Link>
           );
@@ -131,8 +138,8 @@ export default (props: any) => {
       }}
       itemRender={(route, _, routes) => {
         const { breadcrumbName, title, path } = route;
-        const label = title || breadcrumbName
-        const last = routes[routes.length - 1]
+        const label = title || breadcrumbName;
+        const last = routes[routes.length - 1];
         if (last) {
           if (last.path === path || last.linkPath === path) {
             return <span>{label}</span>;
@@ -174,11 +181,12 @@ export default (props: any) => {
         unAccessible={runtimeConfig?.unAccessible}
         noAccessible={runtimeConfig?.noAccessible}
       >
-        {runtimeConfig.childrenRender
-          ? runtimeConfig.childrenRender(<Outlet />, props)
-          : <Outlet />
-        }
+        {runtimeConfig.childrenRender ? (
+          runtimeConfig.childrenRender(<Outlet />, props)
+        ) : (
+          <Outlet />
+        )}
       </Exception>
     </ProLayout>
   );
-}
+};

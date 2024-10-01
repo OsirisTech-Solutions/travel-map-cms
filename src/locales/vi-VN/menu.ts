@@ -12,7 +12,7 @@ export default {
   'menu.dashboard.monitor': 'Giám sát',
   'menu.dashboard.workplace': 'Nơi làm việc',
   'menu.places-management': 'Quản lý địa danh',
-  'menu.places-managemen.list': 'Danh sách',
+  'menu.places-management.list': 'Danh sách',
   'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',
