@@ -132,7 +132,8 @@ export default defineConfig({
   /**
    * @name openAPI plugin configuration
    * @description Generates serve and mock based on the openapi specification, reducing boilerplate code.
-   * @doc https://pro.ant.design/zh-cn/docs/openapi/
+   * @doc https://pro.ant.desi
+   * gn/zh-cn/docs/openapi/
    */
   // openAPI: [
   //   {
