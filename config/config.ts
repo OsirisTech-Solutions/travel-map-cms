@@ -5,9 +5,12 @@ import defaultSettings from './defaultSettings';
 
 import routes from './routes';
 
-const { REACT_APP_ENV = 'dev' } = process.env;
+const { REACT_APP_ENV = 'dev', REACT_MAPBOX_ACCESS_TOKEN } = process.env;
 
 export default defineConfig({
+  define: {
+    REACT_MAPBOX_ACCESS_TOKEN,
+  },
   /**
    * @name Enable hash mode
    * @description Include a hash suffix in the build artifacts to avoid browser caching and enable incremental releases.
