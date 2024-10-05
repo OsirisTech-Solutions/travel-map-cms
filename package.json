@@ -45,6 +45,7 @@
     "@antv/l7-react": "^2.4.3",
     "@mapbox/mapbox-sdk": "^0.16.1",
     "@reduxjs/toolkit": "^2.2.6",
+    "@tinymce/tinymce-react": "^5.1.1",
     "@umijs/route-utils": "^2.2.2",
     "antd": "^5.12.7",
     "antd-style": "^3.6.1",

@@ -1,11 +1,12 @@
 import CCollapse from '@/components/common/CCollapse';
-import SearchBox from '@/components/common/SearchBox';
+// import SearchBox from '@/components/common/SearchBox';
 import Mapbox from '@/components/Mapbox';
-import useSearch from '@/components/Mapbox/hooks/useSearch';
+// import useSearch from '@/components/Mapbox/hooks/useSearch';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { Card, CollapseProps, theme } from 'antd';
 import { createStyles } from 'antd-style';
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect } from 'react';
+import CreationModal from './component/CreationModal';
 import PlaceTable from './component/PlaceTable';
 
 const text = `
@@ -32,8 +33,13 @@ const useStyles = createStyles(({ token }) => {
 });
 const List = () => {
   const { token } = theme.useToken();
-  const mapRef = React.useRef(null);
+  const mapRef = React.useRef<mapboxgl.Map>(null);
   const { styles, cx } = useStyles();
+
+  const [curLocationPicker, setCurLocationPicker] = React.useState<mapboxgl.LngLatLike | undefined>(
+    undefined,
+  );
+  const [isOpenModalCreateNewMarker, setIsOpenModalCreateNewMarker] = React.useState(false);
 
   const panelStyle: React.CSSProperties = {
     background: token.colorWhite,
@@ -60,20 +66,33 @@ const List = () => {
       style: panelStyle,
     },
   ];
-  const {
-    search,
-    data: searchResult,
-    isLoading,
-  } = useSearch({
-    access_token: REACT_MAPBOX_ACCESS_TOKEN,
-  });
-  const onSearch = (value: string) => {
-    search(value);
+  // const {
+  //   search,
+  //   data: searchResult,
+  //   isLoading,
+  // } = useSearch({
+  //   access_token: REACT_MAPBOX_ACCESS_TOKEN,
+  // });
+  // const onSearch = (value: string) => {
+  //   search(value);
+  // };
+
+  // const onSelect = (data: string) => {
+  //   console.log('onSelect', data);
+  // };
+
+  const onCancel = () => {
+    setIsOpenModalCreateNewMarker(false);
   };
 
-  const onSelect = (data: string) => {
-    console.log('onSelect', data);
-  };
+  //
+  useEffect(() => {
+    mapRef.current?.on('click', (e) => {
+      setCurLocationPicker([e.lngLat.lng, e.lngLat.lat]);
+      setIsOpenModalCreateNewMarker(true);
+    });
+  }, []);
+
   return (
     <>
       <Card
@@ -91,7 +110,7 @@ const List = () => {
         size="small"
         className={cx([styles.section])}
       >
-        <SearchBox
+        {/* <SearchBox
           isLoading={isLoading}
           onSearch={onSearch}
           onSelect={onSelect}
@@ -99,7 +118,7 @@ const List = () => {
             value: feature.id,
             label: feature.properties?.name,
           }))}
-        />
+        /> */}
         <Mapbox
           ref={mapRef}
           className={styles.map}
@@ -111,6 +130,12 @@ const List = () => {
           }}
         />
       </Card>
+      <CreationModal
+        currentLocation={curLocationPicker}
+        open={isOpenModalCreateNewMarker}
+        onCancel={onCancel}
+        title="Thêm địa danh mới"
+      />
     </>
   );
 };
