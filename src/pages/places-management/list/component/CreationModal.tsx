@@ -1,6 +1,6 @@
 import CEditor from '@/components/common/CEditor';
 import CModal from '@/components/common/CModal';
-import { Form, Input, ModalProps, Space, Tag } from 'antd';
+import { Form, Input, ModalProps, Space, Tag, Typography } from 'antd';
 import React from 'react';
 
 type CreationModalProps = ModalProps & {
@@ -14,7 +14,7 @@ const CreationModal: React.FC<CreationModalProps> = ({ currentLocation, ...props
     >
       <div style={{ marginBottom: '1.5rem' }}>
         <Space>
-          <div>Vị trí: </div>
+          <Typography.Title level={4}>Vị trí: </Typography.Title>
           <Tag color="blue">{JSON.stringify(currentLocation || '')}</Tag>
         </Space>
       </div>

@@ -1,19 +1,15 @@
 import { Editor } from '@tinymce/tinymce-react';
 import { useRef } from 'react';
+import { Editor as TinyMCEEditor } from 'tinymce';
+
 
 export default function CEditor() {
-  const editorRef = useRef<any>(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current?.editor);
-    }
-  };
+  const editorRef = useRef<TinyMCEEditor | null>(null);
   return (
     <>
       <Editor
         apiKey={'y0v57222nkzitr0bf7zk2nfjvhgikvioaundh182if52aeg6'}
         onInit={(_evt, editor) => (editorRef.current = editor)}
-        initialValue="<p>This is the initial content of the editor.</p>"
         init={{
           height: 500,
           menubar: false,
@@ -102,7 +98,6 @@ export default function CEditor() {
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
         }}
       />
-      <button onClick={log}>Log editor content</button>
     </>
   );
 }
