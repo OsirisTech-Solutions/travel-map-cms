@@ -1,4 +1,5 @@
 import { Footer } from '@/components';
+import { useLoginMutation } from '@/redux/services/auth';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { FormattedMessage, Helmet, SelectLang, useIntl, useModel } from '@umijs/max';
@@ -62,38 +63,35 @@ const Login: React.FC = () => {
   const { styles } = useStyles();
   const intl = useIntl();
 
-  const fetchUserInfo = async () => {
-    // const userInfo = await initialState?.fetchUserInfo?.();
-    if (true) {
-      flushSync(() => {
-        localStorage.setItem('token', '123');
+  const [runLoginMutation] = useLoginMutation();
+
+  const handleSubmit = async (values: { username: string; password: string }) => {
+    const res = await runLoginMutation({
+      body: { username: values.username, password: values.password },
+    })
+
+    if ('error' in res) {
+      console.log('error', res.error);
+      message.error(res.error?.data?.msg || 'Đăng nhập thất bại');
+      return;
+    }
+
+    flushSync(() => {
+        localStorage.setItem('token', res.data.data.accessToken);
+        localStorage.setItem('refreshToken', res.data.data.refreshToken);
         setInitialState((s) => ({
           ...s,
           currentUser: {
-            name: 'Serati Ma',
+            name: 'Admin',
             avatar: 'https://avatars1.githubusercontent.com/u/8186664?s=60&v=4',
             userid: '00000001',
-            email: '',
+            email: 'admin@osiris.team.vn',
           },
         }));
       });
-    }
-  };
 
-  const handleSubmit = async (values: { username: string; password: string }) => {
-    try {
-      if (values.username === 'admin' && values.password === 'ant.design') {
-        message.success('Đăng nhập thành công');
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
+      const urlParams = new URL(window.location.href).searchParams;
         window.location.href = urlParams.get('redirect') || '/';
-        return;
-      }
-      throw new Error('');
-    } catch (error) {
-      console.log(error);
-      message.error('Đăng nhập thất bại');
-    }
   };
 
   return (
