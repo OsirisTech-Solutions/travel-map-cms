@@ -18,7 +18,7 @@ const Mapbox: ForwardRefRenderFunction<mapboxgl.Map, MapProps> = (
         container: mapContainerRef.current!,
         ...initOptions,
       });
-      mapRef.current.getCanvas().style.cursor = 'default'; // Change to grabbing during drag
+      mapRef.current.getCanvas().style.cursor = 'pointer'; // Change to grabbing during drag
     }
 
     return () => {
@@ -40,13 +40,13 @@ const Mapbox: ForwardRefRenderFunction<mapboxgl.Map, MapProps> = (
       // @ts-expect-error: ignore
       mapRef.current.on('dragend', () => {
         // @ts-expect-error: ignore
-        mapRef.current.getCanvas().style.cursor = 'default'; // Revert to default after drag
+        mapRef.current.getCanvas().style.cursor = 'pointer'; // Revert to default after drag
       });
 
       // @ts-expect-error: ignore
       mapRef.current.on('mousemove', () => {
         // @ts-expect-error: ignore
-        mapRef.current.getCanvas().style.cursor = 'default'; // Change to pointer during interaction
+        mapRef.current.getCanvas().style.cursor = 'pointer'; // Change to pointer during interaction
       });
     }
     return () => {
