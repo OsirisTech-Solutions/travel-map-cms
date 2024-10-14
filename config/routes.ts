@@ -63,6 +63,7 @@ export default [
             ],
           },
           // places management
+          routes.tourism,
           routes.places,
           {
             path: '/form',

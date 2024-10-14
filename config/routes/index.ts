@@ -1,5 +1,7 @@
-import places from "./places";
+import places from './places';
+import tourism from './tourism';
 
 export default {
-  places
-}
+  places,
+  tourism,
+};
