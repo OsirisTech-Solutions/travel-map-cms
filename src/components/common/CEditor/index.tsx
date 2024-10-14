@@ -1,15 +1,34 @@
 import { Editor } from '@tinymce/tinymce-react';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { Editor as TinyMCEEditor } from 'tinymce';
+import ImageLibary from './ImageLibary';
 
-
+enum CustomEditorAction {
+  INSERT_IMAGE = 'insertImage',
+  CUSTOM_PREVIEW = 'customPreview',
+}
 export default function CEditor() {
   const editorRef = useRef<TinyMCEEditor | null>(null);
+  const [isOpenImageLibrary, setIsOpenImageLibrary] = React.useState(false);
+
+  const onInsertImage = (data: any) => {
+    if (editorRef.current) {
+      editorRef.current.execCommand(
+        'mceInsertContent',
+        false,
+        `<img src="${data?.downloadUrl}" alt="${
+          data?.metadata?.filename?.split('.')?.[0]
+        }" data-mce-src="${data?.downloadUrl}" style="width: 100%" />`,
+      )
+    }
+  }
+
   return (
     <>
       <Editor
         apiKey={'y0v57222nkzitr0bf7zk2nfjvhgikvioaundh182if52aeg6'}
         onInit={(_evt, editor) => (editorRef.current = editor)}
+
         init={{
           height: 500,
           menubar: false,
@@ -51,12 +70,12 @@ export default function CEditor() {
               items: ['alignleft', 'aligncenter', 'alignright', 'alignjustify'],
             },
             {
-              name: 'indentation',
-              items: ['outdent', 'indent'],
+              name: 'insert',
+              items: [CustomEditorAction.INSERT_IMAGE, 'media', 'table', 'hr', CustomEditorAction.CUSTOM_PREVIEW],
             },
             {
-              name: 'insert',
-              items: ['image', 'media', 'table', 'hr'],
+              name: 'indentation',
+              items: ['outdent', 'indent'],
             },
             {
               name: 'blocks',
@@ -96,8 +115,27 @@ export default function CEditor() {
             },
           ],
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          setup(editor) {
+            editor.ui.registry.addButton(CustomEditorAction.CUSTOM_PREVIEW, {
+              icon: 'preview',
+              tooltip: 'Xem trước',
+              onAction: () => {
+                setIsOpenImageLibrary(true)
+              },
+            })
+
+            editor.ui.registry.addButton(CustomEditorAction.INSERT_IMAGE, {
+              icon: 'image',
+              tooltip: 'Thư viện ảnh',
+              onAction: () => {
+                editorRef.current?.windowManager.close();
+                setIsOpenImageLibrary(true)
+              },
+            });
+          },
         }}
       />
+      <ImageLibary isOpen={isOpenImageLibrary} setIsOpen={setIsOpenImageLibrary} insertImage={onInsertImage} />
     </>
   );
 }
