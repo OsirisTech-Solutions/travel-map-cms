@@ -14,9 +14,9 @@ import type { TimeType } from './components/SalesCard';
 import SalesCard from './components/SalesCard';
 import TopSearch from './components/TopSearch';
 import type { AnalysisData } from './data.d';
+import { mock } from './mock';
 import useStyles from './style.style';
 import { getTimeDistance } from './utils/utils';
-import { mock } from './mock';
 type RangePickerValue = RangePickerProps<dayjs.Dayjs>['value'];
 type AnalysisProps = {
   dashboardAndanalysis: AnalysisData;
@@ -31,7 +31,7 @@ const Analysis: FC<AnalysisProps> = () => {
     getTimeDistance('year'),
   );
   const loading = false;
-  const data = mock
+  const data = mock;
   const selectDate = (type: TimeType) => {
     setRangePickerValue(getTimeDistance(type));
   };
@@ -97,8 +97,12 @@ const Analysis: FC<AnalysisProps> = () => {
   return (
     <GridContent>
       <>
+        <div className="text-red-400">asdasd</div>
         <Suspense fallback={<PageLoading />}>
-          <IntroduceRow loading={loading} visitData={data?.visitData || []} />
+          <IntroduceRow
+            loading={loading}
+            visitData={data?.visitData || []}
+          />
         </Suspense>
 
         <Suspense fallback={null}>
@@ -118,7 +122,13 @@ const Analysis: FC<AnalysisProps> = () => {
             marginTop: 24,
           }}
         >
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Col
+            xl={12}
+            lg={24}
+            md={24}
+            sm={24}
+            xs={24}
+          >
             <Suspense fallback={null}>
               <TopSearch
                 loading={loading}
@@ -128,7 +138,13 @@ const Analysis: FC<AnalysisProps> = () => {
               />
             </Suspense>
           </Col>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Col
+            xl={12}
+            lg={24}
+            md={24}
+            sm={24}
+            xs={24}
+          >
             <Suspense fallback={null}>
               <ProportionSales
                 dropdownGroup={dropdownGroup}
