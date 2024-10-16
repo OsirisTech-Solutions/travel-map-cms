@@ -1,4 +1,6 @@
 import { Footer } from '@/components';
+import { useLoginMutation } from '@/redux/services/authApi';
+import { KEYS } from '@/utils/constant';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { FormattedMessage, Helmet, SelectLang, useIntl, useModel } from '@umijs/max';
@@ -58,42 +60,35 @@ const Lang = () => {
 };
 
 const Login: React.FC = () => {
-  const { initialState, setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
   const intl = useIntl();
-
-  const fetchUserInfo = async () => {
-    // const userInfo = await initialState?.fetchUserInfo?.();
-    if (true) {
+  const { setInitialState } = useModel('@@initialState');
+  const [loginMutation] = useLoginMutation();
+  const fetchUserInfo = async (values: REQUEST_DEFIND.LoginRequestBody) => {
+    const res = await loginMutation({
+      body: {
+        username: values.username,
+        password: values.password,
+      },
+    });
+    if ('data' in res) {
       flushSync(() => {
-        localStorage.setItem('token', '123');
+        localStorage.setItem(KEYS.ACCESS_TOKEN, res?.data?.data?.accessToken || '');
         setInitialState((s) => ({
           ...s,
-          currentUser: {
-            name: 'Serati Ma',
-            avatar: 'https://avatars1.githubusercontent.com/u/8186664?s=60&v=4',
-            userid: '00000001',
-            email: '',
-          },
+          currentUser: {},
         }));
       });
+      message.success('Đăng nhâp thành công');
+      const urlParams = new URL(window.location.href).searchParams;
+      window.location.href = urlParams.get('redirect') || '/';
+    } else {
+      message.error('Đăng nhập thất bại');
     }
   };
 
-  const handleSubmit = async (values: { username: string; password: string }) => {
-    try {
-      if (values.username === 'admin' && values.password === 'ant.design') {
-        message.success('Đăng nhập thành công');
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        window.location.href = urlParams.get('redirect') || '/';
-        return;
-      }
-      throw new Error('');
-    } catch (error) {
-      console.log(error);
-      message.error('Đăng nhập thất bại');
-    }
+  const handleSubmit = async (values: REQUEST_DEFIND.LoginRequestBody) => {
+    await fetchUserInfo(values);
   };
 
   return (
@@ -102,7 +97,7 @@ const Login: React.FC = () => {
         <title>
           {intl.formatMessage({
             id: 'menu.login',
-            defaultMessage: '登录页',
+            defaultMessage: 'Admin',
           })}
           - {Settings.title}
         </title>
@@ -125,8 +120,8 @@ const Login: React.FC = () => {
               src="/logo.svg"
             />
           }
-          title="Ant Design"
-          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
+          title="Đăng nhập"
+          subTitle={'Chào mừng bạn đến với hệ thống quản trị'}
           initialValues={{
             autoLogin: true,
           }}
