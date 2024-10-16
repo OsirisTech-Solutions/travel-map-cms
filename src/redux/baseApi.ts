@@ -33,8 +33,8 @@ export const baseQueryWithReauth: BaseQueryFn<
   await mutex.waitForUnlock();
   let result = await newBaseQuery(args, api, extraOptions);
   if (result?.error && result?.error?.status === 401) {
-    Cookies.remove(KEYS.ACCESS_TOKEN);
-    window.location.reload();
+    // Cookies.remove(KEYS.ACCESS_TOKEN);
+    // window.location.href = '/user/login';
     // checking whether the mutex is locked
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();

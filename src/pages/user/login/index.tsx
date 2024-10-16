@@ -6,6 +6,7 @@ import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-compone
 import { FormattedMessage, Helmet, SelectLang, useIntl, useModel } from '@umijs/max';
 import { message } from 'antd';
 import { createStyles } from 'antd-style';
+import Cookies from 'js-cookie';
 import React from 'react';
 import { flushSync } from 'react-dom';
 import Settings from '../../../../config/defaultSettings';
@@ -72,11 +73,16 @@ const Login: React.FC = () => {
       },
     });
     if ('data' in res) {
+      console.log('🚀 -------------------------🚀');
+      console.log('🚀 ~ fetchUserInfo ~ s:', res);
+      console.log('🚀 -------------------------🚀');
       flushSync(() => {
-        localStorage.setItem(KEYS.ACCESS_TOKEN, res?.data?.data?.accessToken || '');
+        Cookies.set(KEYS.ACCESS_TOKEN, res?.data?.data?.accessToken || '');
         setInitialState((s) => ({
           ...s,
-          currentUser: {},
+          currentUser: {
+            name: 'root',
+          },
         }));
       });
       message.success('Đăng nhâp thành công');
