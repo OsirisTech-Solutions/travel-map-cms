@@ -2,6 +2,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import React, { useRef } from 'react';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import ImageLibary from './ImageLibary';
+import { Spin } from 'antd';
 
 enum CustomEditorAction {
   INSERT_IMAGE = 'insertImage',
@@ -9,6 +10,7 @@ enum CustomEditorAction {
 }
 export default function CEditor() {
   const editorRef = useRef<TinyMCEEditor | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [isOpenImageLibrary, setIsOpenImageLibrary] = React.useState(false);
 
   const onInsertImage = (data: any) => {
@@ -16,8 +18,7 @@ export default function CEditor() {
       editorRef.current.execCommand(
         'mceInsertContent',
         false,
-        `<img src="${data?.downloadUrl}" alt="${
-          data?.metadata?.filename?.split('.')?.[0]
+        `<img src="${data?.downloadUrl}" alt="${data?.metadata?.filename?.split('.')?.[0]
         }" data-mce-src="${data?.downloadUrl}" style="width: 100%" />`,
       )
     }
@@ -25,9 +26,20 @@ export default function CEditor() {
 
   return (
     <>
+      {
+        isLoading && (
+          <div className='flex flex-col min-h-52 items-center gap-2'>
+            <div className='font-semibold'>Đang tải editor!</div>
+            <Spin spinning />
+          </div>
+        )
+      }
       <Editor
         apiKey={'y0v57222nkzitr0bf7zk2nfjvhgikvioaundh182if52aeg6'}
-        onInit={(_evt, editor) => (editorRef.current = editor)}
+        onInit={(_evt, editor) => {
+          editorRef.current = editor;
+          setIsLoading(false)
+        }}
 
         init={{
           height: 500,

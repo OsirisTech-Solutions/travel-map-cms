@@ -1,7 +1,11 @@
 import React from 'react'
 import CModal from '../CModal'
-import { Image } from 'antd'
 import { createStyles } from 'antd-style'
+import { message, Upload } from 'antd'
+import ImageItem from './ImageItem'
+import { UploadProps } from 'antd/lib'
+import { splitArray } from '@/utils/utils'
+import { InboxOutlined } from '@ant-design/icons'
 
 type ImageLibaryProps = {
   insertImage?: (url: string) => void
@@ -21,30 +25,19 @@ const imgList = [
   { id: 9, url: 'https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg' },
   { id: 10, url: 'https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg' },
   { id: 11, url: 'https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg' }
-]
-// split to 4 array from imgList each array least 1 element
-// @ts-ignore
-function splitArrayIntoChunks(array, numChunks) {
-  const chunks = Array.from({ length: numChunks }, () => []);
-  // @ts-ignore
-  array.forEach((item, index) => {
-    // @ts-ignore
-    chunks[index % numChunks].push(item);
-  });
-  return chunks;
-}
+];
+
 const useStyles = createStyles(({ token }) => {
   return {
     libaryContainer: {
       gridTemplateColumns: 'repeat(4, 1fr)',
       gap: token.paddingContentHorizontal,
       display: 'grid',
-      height: '600px',
-      overflow: 'scroll'
     },
     col: {
-      display: 'grid',
-      gap: token.paddingContentHorizontal,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: token.paddingContentHorizontal
     },
     item: {
       maxWidth: '100%',
@@ -58,17 +51,39 @@ const ImageLibary: React.FC<ImageLibaryProps> = ({ insertImage, isOpen, setIsOpe
   const onCancel = () => {
     setIsOpen(false)
   }
+  const uploadProps: UploadProps = {
+    name: 'file',
+    multiple: false,
+    showUploadList: false,
+    beforeUpload: async (file: any) => {
+      const isJpgOrPng =
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png' ||
+        file.type === 'image/svg+xml';
+      if (!isJpgOrPng) {
+        message.error('Vui lòng upload ảnh theo định dạng JPG/PNG!');
+      }
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isLt10M) {
+        message.error('Dung lượng ảnh không vượt quá 10MB!');
+      }
+      if (isJpgOrPng && isLt10M) {
+        // upload
+      }
+      return false;
+    },
+  };
   const renderImageList = () => {
     return (
       <div className={styles.libaryContainer}>
         {
-          splitArrayIntoChunks(imgList, 4).map((imgs: any, index) => {
+          splitArray(imgList, 4).map((imgs: any, index) => {
             return (<div className={styles.col} key={index}>
               {
                 imgs.map((img: any) => {
                   return (
                     <div key={index}>
-                      <img
+                      <ImageItem
                         className={styles.item}
                         src={img.url}
                       />
@@ -84,7 +99,20 @@ const ImageLibary: React.FC<ImageLibaryProps> = ({ insertImage, isOpen, setIsOpe
   }
   return (
     <CModal title='Thư viện ảnh' width={'100%'} height={800} open={isOpen} onCancel={onCancel}>
-      {renderImageList()}
+      <div className='h-[800px] overflow-y-scroll'>
+        <div className='mb-4'>
+          <Upload.Dragger {...uploadProps} height={200}>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">Tải ảnh lên</p>
+            <p className="ant-upload-hint">
+              Click hoặc kéo ảnh vào khu vực
+            </p>
+          </Upload.Dragger>
+        </div>
+        {renderImageList()}
+      </div>
     </CModal>
   )
 }

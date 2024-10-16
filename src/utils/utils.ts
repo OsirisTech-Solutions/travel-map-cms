@@ -51,3 +51,16 @@ export const showError = (error: any) => {
     message.error('Đã có lỗi xảy ra!')
   }
 }
+// @ts-ignore
+export function splitArray(array, splitNumber) {
+  const result = [];
+  const chunkSize = Math.ceil(array.length / splitNumber); // Determine chunk size
+
+  for (let i = 0; i < splitNumber; i++) {
+    const start = i * chunkSize;
+    const end = start + chunkSize;
+    result.push(array.slice(start, end));
+  }
+
+  return result.filter(chunk => chunk.length > 0); // Remove empty arrays
+}
