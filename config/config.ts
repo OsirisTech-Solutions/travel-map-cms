@@ -5,11 +5,12 @@ import defaultSettings from './defaultSettings';
 
 import routes from './routes';
 
-const { REACT_APP_ENV = 'dev', REACT_MAPBOX_ACCESS_TOKEN } = process.env;
+const { REACT_APP_ENV = 'dev', REACT_MAPBOX_ACCESS_TOKEN, REACT_API_URL } = process.env;
 
 export default defineConfig({
   define: {
     REACT_MAPBOX_ACCESS_TOKEN,
+    REACT_API_URL
   },
   /**
    * @name Enable hash mode
