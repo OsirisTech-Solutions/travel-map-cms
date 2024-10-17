@@ -3,25 +3,42 @@ import React, { useRef } from 'react';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import ImageLibary from './ImageLibary';
 import { Spin } from 'antd';
+import PreviewHTMl from './PreviewHTMl';
 
 enum CustomEditorAction {
   INSERT_IMAGE = 'insertImage',
   CUSTOM_PREVIEW = 'customPreview',
 }
-export default function CEditor() {
+type CEditorProps = {
+  id?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+}
+export default function CEditor({id, value, onChange}: CEditorProps) {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isOpenImageLibrary, setIsOpenImageLibrary] = React.useState(false);
+  const [isOpenPreview, setIsOpenPreview] = React.useState(false);
+  const [richText, setRichText] = React.useState<string>('');
 
-  const onInsertImage = (data: any) => {
-    if (editorRef.current) {
+  const onInsertImage = (path: string | undefined) => {
+    if (editorRef.current && path) {
+      setIsOpenImageLibrary(false)
       editorRef.current.execCommand(
         'mceInsertContent',
         false,
-        `<img src="${data?.downloadUrl}" alt="${data?.metadata?.filename?.split('.')?.[0]
-        }" data-mce-src="${data?.downloadUrl}" style="width: 100%" />`,
+        `<img src="${path}" alt="travel" data-mce-src="${path}" style="width: 100%" />`,
       )
     }
+  }
+
+  const onChangeValue = (value: string) => {
+    setRichText(value)
+    onChange?.(value)
+  }
+
+  const onCancelPreview = () => {
+    setIsOpenPreview(false)
   }
 
   return (
@@ -35,12 +52,17 @@ export default function CEditor() {
         )
       }
       <Editor
+      id={id}
         apiKey={'y0v57222nkzitr0bf7zk2nfjvhgikvioaundh182if52aeg6'}
         onInit={(_evt, editor) => {
           editorRef.current = editor;
           setIsLoading(false)
         }}
-
+        initialValue={value}
+        value={value}
+        onEditorChange={(e) => {
+          onChangeValue(e)
+        }}
         init={{
           height: 500,
           menubar: false,
@@ -132,7 +154,7 @@ export default function CEditor() {
               icon: 'preview',
               tooltip: 'Xem trước',
               onAction: () => {
-                setIsOpenImageLibrary(true)
+                setIsOpenPreview(true)
               },
             })
 
@@ -148,6 +170,7 @@ export default function CEditor() {
         }}
       />
       <ImageLibary isOpen={isOpenImageLibrary} setIsOpen={setIsOpenImageLibrary} insertImage={onInsertImage} />
+      <PreviewHTMl richText={richText} open={isOpenPreview} onCancel={onCancelPreview} />
     </>
   );
 }

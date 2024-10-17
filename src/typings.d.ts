@@ -90,6 +90,14 @@ declare module MapboxT {
 }
 
 declare module REQUEST_DEFIND {
+  // COMMON
+  export type GetListRequestParam = {
+    page: number;
+    limit: number;
+  };
+  export type CRUDRequestParam = {
+    id: string;
+  }
   // AUTH
   export type LoginRequestBody = {
     username: string;
@@ -103,6 +111,10 @@ declare module REQUEST_DEFIND {
     page?: number;
     limit?: number;
   };
+  export type UploadFileRequestBody = {
+    file: File;
+  };
+  export type CRUDPlaceRequestBody = Omit<SCHEMA.Place, 'id' | 'createdAt' | 'updatedAt'>;
 }
 // SCHEMA
 declare module SCHEMA {
@@ -116,6 +128,28 @@ declare module SCHEMA {
     name: string;
     originalName: string;
     type: string;
+    updatedAt: string;
+  }
+  export interface Category {
+    createdAt: string;
+    description: string;
+    id: string;
+    name: string;
+    slug: string;
+    thumbnail: string;
+    updatedAt: string;
+  }
+  export interface Place {
+    categoryId: string;
+    content: string;
+    createdAt: string;
+    description: string;
+    id: string;
+    lat: string;
+    long: string;
+    name: string;
+    slug: string;
+    thumbnail: string;
     updatedAt: string;
   }
 }
