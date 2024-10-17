@@ -18,6 +18,8 @@ declare module 'react-fittext';
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 declare const REACT_MAPBOX_ACCESS_TOKEN: string;
 declare const REACT_API_URL: string;
+declare const REACT_EDITOR_KEY: string;
+declare const REACT_CDN_URL: string;
 declare module MapboxT {
   interface SearchConfig {
     language?: string;
@@ -97,7 +99,7 @@ declare module REQUEST_DEFIND {
   };
   export type CRUDRequestParam = {
     id: string;
-  }
+  };
   // AUTH
   export type LoginRequestBody = {
     username: string;

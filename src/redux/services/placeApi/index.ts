@@ -20,6 +20,7 @@ export const categoryApi = baseAPI
           method: MethodType.GET,
           params: data?.params,
         }),
+        providesTags: [CategoryTags.namespace],
       }),
       delelePlaceById: builder.mutation<
         ResponseT<any>,

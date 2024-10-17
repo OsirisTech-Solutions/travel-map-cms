@@ -1,16 +1,23 @@
 // https://umijs.org/config/
 import { defineConfig } from '@umijs/max';
-import { join } from 'path';
 import defaultSettings from './defaultSettings';
 
 import routes from './routes';
 
-const { REACT_APP_ENV = 'dev', REACT_MAPBOX_ACCESS_TOKEN, REACT_API_URL } = process.env;
+const {
+  REACT_APP_ENV = 'dev',
+  REACT_MAPBOX_ACCESS_TOKEN,
+  REACT_API_URL,
+  REACT_EDITOR_KEY,
+  REACT_CDN_URL,
+} = process.env;
 
 export default defineConfig({
   define: {
     REACT_MAPBOX_ACCESS_TOKEN,
-    REACT_API_URL
+    REACT_API_URL,
+    REACT_EDITOR_KEY,
+    REACT_CDN_URL,
   },
   /**
    * @name Enable hash mode

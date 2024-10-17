@@ -11,7 +11,10 @@ const FILEApi = baseAPI
   })
   .injectEndpoints({
     endpoints: (builder) => ({
-      uploadFile: builder.mutation<ResponseT<{fileName: string}>, RequestT<REQUEST_DEFIND.UploadFileRequestBody, undefined>>({
+      uploadFile: builder.mutation<
+        ResponseT<{ fileName: string }>,
+        RequestT<REQUEST_DEFIND.UploadFileRequestBody, undefined>
+      >({
         query: (data) => {
           console.log(data);
           const formData = new FormData();
@@ -24,7 +27,10 @@ const FILEApi = baseAPI
         },
         invalidatesTags: ['FILE'],
       }),
-      getAllImage: builder.query<ResponseT<{items: SCHEMA.File[], total: number}>, RequestT<undefined, REQUEST_DEFIND.GetAllImageRequestParam>>({
+      getAllImage: builder.query<
+        ResponseT<{ items: SCHEMA.File[]; total: number }>,
+        RequestT<undefined, REQUEST_DEFIND.GetAllImageRequestParam>
+      >({
         query: (data) => ({
           url: '/file',
           method: MethodType.GET,
@@ -42,6 +48,7 @@ const FILEApi = baseAPI
         forceRefetch({ currentArg, previousArg }) {
           return currentArg !== previousArg;
         },
+        providesTags: ['FILE'],
       }),
     }),
   });

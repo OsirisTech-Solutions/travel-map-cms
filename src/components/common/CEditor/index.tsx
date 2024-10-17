@@ -1,8 +1,8 @@
 import { Editor } from '@tinymce/tinymce-react';
+import { Spin } from 'antd';
 import React, { useRef } from 'react';
 import { Editor as TinyMCEEditor } from 'tinymce';
-import ImageLibary from './ImageLibary';
-import { Spin } from 'antd';
+import ImageLibary from './ImageLibrary';
 import PreviewHTMl from './PreviewHTMl';
 
 enum CustomEditorAction {
@@ -13,8 +13,8 @@ type CEditorProps = {
   id?: string;
   value?: string;
   onChange?: (value: string) => void;
-}
-export default function CEditor({id, value, onChange}: CEditorProps) {
+};
+export default function CEditor({ id, value, onChange }: CEditorProps) {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isOpenImageLibrary, setIsOpenImageLibrary] = React.useState(false);
@@ -23,45 +23,42 @@ export default function CEditor({id, value, onChange}: CEditorProps) {
 
   const onInsertImage = (path: string | undefined) => {
     if (editorRef.current && path) {
-      setIsOpenImageLibrary(false)
+      setIsOpenImageLibrary(false);
       editorRef.current.execCommand(
         'mceInsertContent',
         false,
         `<img src="${path}" alt="travel" data-mce-src="${path}" style="width: 100%" />`,
-      )
+      );
     }
-  }
+  };
 
   const onChangeValue = (value: string) => {
-    setRichText(value)
-    onChange?.(value)
-  }
+    setRichText(value);
+    onChange?.(value);
+  };
 
   const onCancelPreview = () => {
-    setIsOpenPreview(false)
-  }
+    setIsOpenPreview(false);
+  };
 
   return (
     <>
-      {
-        isLoading && (
-          <div className='flex flex-col min-h-52 items-center gap-2'>
-            <div className='font-semibold'>Đang tải editor!</div>
-            <Spin spinning />
-          </div>
-        )
-      }
+      {isLoading && (
+        <div className="flex flex-col min-h-52 items-center gap-2">
+          <div className="font-semibold">Đang tải editor!</div>
+          <Spin spinning />
+        </div>
+      )}
       <Editor
-      id={id}
-        apiKey={'y0v57222nkzitr0bf7zk2nfjvhgikvioaundh182if52aeg6'}
+        id={id}
+        apiKey={REACT_EDITOR_KEY}
         onInit={(_evt, editor) => {
           editorRef.current = editor;
-          setIsLoading(false)
+          setIsLoading(false);
         }}
-        initialValue={value}
         value={value}
         onEditorChange={(e) => {
-          onChangeValue(e)
+          onChangeValue(e);
         }}
         init={{
           height: 500,
@@ -105,15 +102,13 @@ export default function CEditor({id, value, onChange}: CEditorProps) {
             },
             {
               name: 'insert',
-              items: [CustomEditorAction.INSERT_IMAGE, 'media', 'table', 'hr', CustomEditorAction.CUSTOM_PREVIEW],
-            },
-            {
-              name: 'indentation',
-              items: ['outdent', 'indent'],
-            },
-            {
-              name: 'blocks',
-              items: ['paragraph', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+              items: [
+                CustomEditorAction.INSERT_IMAGE,
+                'media',
+                'table',
+                'hr',
+                CustomEditorAction.CUSTOM_PREVIEW,
+              ],
             },
             {
               name: 'colors',
@@ -130,6 +125,14 @@ export default function CEditor({id, value, onChange}: CEditorProps) {
             {
               name: 'links',
               items: ['link'],
+            },
+            {
+              name: 'indentation',
+              items: ['outdent', 'indent'],
+            },
+            {
+              name: 'blocks',
+              items: ['paragraph', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
             },
             {
               name: 'clipboard',
@@ -154,23 +157,31 @@ export default function CEditor({id, value, onChange}: CEditorProps) {
               icon: 'preview',
               tooltip: 'Xem trước',
               onAction: () => {
-                setIsOpenPreview(true)
+                setIsOpenPreview(true);
               },
-            })
+            });
 
             editor.ui.registry.addButton(CustomEditorAction.INSERT_IMAGE, {
               icon: 'image',
               tooltip: 'Thư viện ảnh',
               onAction: () => {
                 editorRef.current?.windowManager.close();
-                setIsOpenImageLibrary(true)
+                setIsOpenImageLibrary(true);
               },
             });
           },
         }}
       />
-      <ImageLibary isOpen={isOpenImageLibrary} setIsOpen={setIsOpenImageLibrary} insertImage={onInsertImage} />
-      <PreviewHTMl richText={richText} open={isOpenPreview} onCancel={onCancelPreview} />
+      <ImageLibary
+        isOpen={isOpenImageLibrary}
+        setIsOpen={setIsOpenImageLibrary}
+        insertImage={onInsertImage}
+      />
+      <PreviewHTMl
+        richText={richText}
+        open={isOpenPreview}
+        onCancel={onCancelPreview}
+      />
     </>
   );
 }
