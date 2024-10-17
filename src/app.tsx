@@ -4,7 +4,11 @@ import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading, SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
+import Cookies from 'js-cookie';
 import defaultSettings from '../config/defaultSettings';
+import { guestApi } from './redux/services/authApi';
+import { store } from './redux/store';
+import { KEYS } from './utils/constant';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
@@ -18,29 +22,32 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<any | undefined>;
 }> {
   const fetchUserInfo = async () => {
+    const id = Cookies.get(KEYS.UID) || '';
     try {
-      const data = localStorage.getItem('token');
-      if (!data) {
-        throw new Error('token is not exist!');
+      const res = await store.dispatch(
+        guestApi.endpoints.getUser.initiate({
+          params: {
+            id,
+          },
+        }),
+      );
+      if ('data' in res) {
+        return res?.data;
       }
-      return data;
     } catch (error) {
-      history.push(loginPath);
+      // history.push(loginPath);
     }
     return undefined;
   };
 
   const { location } = history;
   if (![loginPath].includes(location.pathname)) {
-    const currentUser = await fetchUserInfo();
     return {
-      fetchUserInfo,
-      currentUser,
+      currentUser: await fetchUserInfo(),
       settings: defaultSettings as Partial<LayoutSettings>,
     };
   }
   return {
-    fetchUserInfo,
     settings: defaultSettings as Partial<LayoutSettings>,
   };
 }
@@ -51,7 +58,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     actionsRender: () => [<SelectLang key="SelectLang" />],
     avatarProps: {
       src: 'https://avatars.githubusercontent.com/u/8186664?s=60&v=4',
-      
+
       title: <AvatarName />,
       render: (_, avatarChildren) => {
         return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
@@ -63,9 +70,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
-      }
+      // if (!initialState?.currentUser && location.pathname !== loginPath) {
+      //   history.push(loginPath);
+      // }
     },
     bgLayoutImgList: [
       {
@@ -89,7 +96,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     ],
     links: isDev
       ? [
-          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
+          <Link
+            key="openapi"
+            to="/umi/plugin/openapi"
+            target="_blank"
+          >
             <LinkOutlined />
             <span>OpenAPI</span>
           </Link>,
@@ -123,4 +134,3 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     ...initialState?.settings,
   };
 };
-

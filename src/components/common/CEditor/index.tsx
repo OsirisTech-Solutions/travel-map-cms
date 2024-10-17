@@ -1,4 +1,5 @@
 import { Editor } from '@tinymce/tinymce-react';
+import { Spin } from 'antd';
 import React, { useRef } from 'react';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import ImageLibary from './ImageLibary';
@@ -9,6 +10,7 @@ enum CustomEditorAction {
 }
 export default function CEditor() {
   const editorRef = useRef<TinyMCEEditor | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [isOpenImageLibrary, setIsOpenImageLibrary] = React.useState(false);
 
   const onInsertImage = (data: any) => {
@@ -19,16 +21,24 @@ export default function CEditor() {
         `<img src="${data?.downloadUrl}" alt="${
           data?.metadata?.filename?.split('.')?.[0]
         }" data-mce-src="${data?.downloadUrl}" style="width: 100%" />`,
-      )
+      );
     }
-  }
+  };
 
   return (
     <>
+      {isLoading && (
+        <div className="flex flex-col min-h-52 items-center gap-2">
+          <div className="font-semibold">Đang tải editor!</div>
+          <Spin spinning />
+        </div>
+      )}
       <Editor
         apiKey={'y0v57222nkzitr0bf7zk2nfjvhgikvioaundh182if52aeg6'}
-        onInit={(_evt, editor) => (editorRef.current = editor)}
-
+        onInit={(_evt, editor) => {
+          editorRef.current = editor;
+          setIsLoading(false);
+        }}
         init={{
           height: 500,
           menubar: false,
@@ -71,7 +81,13 @@ export default function CEditor() {
             },
             {
               name: 'insert',
-              items: [CustomEditorAction.INSERT_IMAGE, 'media', 'table', 'hr', CustomEditorAction.CUSTOM_PREVIEW],
+              items: [
+                CustomEditorAction.INSERT_IMAGE,
+                'media',
+                'table',
+                'hr',
+                CustomEditorAction.CUSTOM_PREVIEW,
+              ],
             },
             {
               name: 'indentation',
@@ -120,22 +136,26 @@ export default function CEditor() {
               icon: 'preview',
               tooltip: 'Xem trước',
               onAction: () => {
-                setIsOpenImageLibrary(true)
+                setIsOpenImageLibrary(true);
               },
-            })
+            });
 
             editor.ui.registry.addButton(CustomEditorAction.INSERT_IMAGE, {
               icon: 'image',
               tooltip: 'Thư viện ảnh',
               onAction: () => {
                 editorRef.current?.windowManager.close();
-                setIsOpenImageLibrary(true)
+                setIsOpenImageLibrary(true);
               },
             });
           },
         }}
       />
-      <ImageLibary isOpen={isOpenImageLibrary} setIsOpen={setIsOpenImageLibrary} insertImage={onInsertImage} />
+      <ImageLibary
+        isOpen={isOpenImageLibrary}
+        setIsOpen={setIsOpenImageLibrary}
+        insertImage={onInsertImage}
+      />
     </>
   );
 }

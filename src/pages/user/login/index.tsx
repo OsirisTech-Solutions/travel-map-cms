@@ -1,10 +1,12 @@
 import { Footer } from '@/components';
-import { useLoginMutation } from '@/redux/services/auth';
+import { useLoginMutation } from '@/redux/services/authApi';
+import { KEYS } from '@/utils/constant';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { FormattedMessage, Helmet, SelectLang, useIntl, useModel } from '@umijs/max';
 import { message } from 'antd';
 import { createStyles } from 'antd-style';
+import Cookies from 'js-cookie';
 import React from 'react';
 import { flushSync } from 'react-dom';
 import Settings from '../../../../config/defaultSettings';
@@ -59,39 +61,40 @@ const Lang = () => {
 };
 
 const Login: React.FC = () => {
-  const { initialState, setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
   const intl = useIntl();
-
-  const [runLoginMutation] = useLoginMutation();
-
-  const handleSubmit = async (values: { username: string; password: string }) => {
-    const res = await runLoginMutation({
-      body: { username: values.username, password: values.password },
-    })
-
-    if ('error' in res) {
-      console.log('error', res.error);
-      message.error(res.error?.data?.msg || 'Đăng nhập thất bại');
-      return;
-    }
-
-    flushSync(() => {
-        localStorage.setItem('token', res.data.data.accessToken);
-        localStorage.setItem('refreshToken', res.data.data.refreshToken);
+  const { setInitialState } = useModel('@@initialState');
+  const [loginMutation] = useLoginMutation();
+  const fetchUserInfo = async (values: REQUEST_DEFIND.LoginRequestBody) => {
+    const res = await loginMutation({
+      body: {
+        username: values.username,
+        password: values.password,
+      },
+    });
+    if ('data' in res) {
+      console.log('🚀 -------------------------🚀');
+      console.log('🚀 ~ fetchUserInfo ~ s:', res);
+      console.log('🚀 -------------------------🚀');
+      flushSync(() => {
+        Cookies.set(KEYS.ACCESS_TOKEN, res?.data?.data?.accessToken || '');
         setInitialState((s) => ({
           ...s,
           currentUser: {
-            name: 'Admin',
-            avatar: 'https://avatars1.githubusercontent.com/u/8186664?s=60&v=4',
-            userid: '00000001',
-            email: 'admin@osiris.team.vn',
+            name: 'root',
           },
         }));
       });
-
+      message.success('Đăng nhâp thành công');
       const urlParams = new URL(window.location.href).searchParams;
-        window.location.href = urlParams.get('redirect') || '/';
+      window.location.href = urlParams.get('redirect') || '/';
+    } else {
+      message.error('Đăng nhập thất bại');
+    }
+  };
+
+  const handleSubmit = async (values: REQUEST_DEFIND.LoginRequestBody) => {
+    await fetchUserInfo(values);
   };
 
   return (
@@ -100,7 +103,7 @@ const Login: React.FC = () => {
         <title>
           {intl.formatMessage({
             id: 'menu.login',
-            defaultMessage: '登录页',
+            defaultMessage: 'Admin',
           })}
           - {Settings.title}
         </title>
@@ -123,8 +126,8 @@ const Login: React.FC = () => {
               src="/logo.svg"
             />
           }
-          title="Ant Design"
-          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
+          title="Đăng nhập"
+          subTitle={'Chào mừng bạn đến với hệ thống quản trị'}
           initialValues={{
             autoLogin: true,
           }}
