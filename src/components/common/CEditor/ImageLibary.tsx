@@ -3,15 +3,17 @@ import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
 import { createStyles } from 'antd-style';
 import { UploadProps } from 'antd/lib';
-import React from 'react';
+import React, { useEffect } from 'react';
 import CModal from '../CModal';
 import ImageItem from './ImageItem';
+import { useGetAllImageQuery } from '@/redux/services/uploadApi';
 
 type ImageLibaryProps = {
   insertImage?: (url: string) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 };
+const imgLibaryId = 'img-libary';
 const imgList = [
   { id: 0, url: 'https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg' },
   { id: 1, url: 'https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg' },
@@ -48,9 +50,37 @@ const useStyles = createStyles(({ token }) => {
 });
 const ImageLibary: React.FC<ImageLibaryProps> = ({ insertImage, isOpen, setIsOpen }) => {
   const { styles } = useStyles();
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  console.log("🚀 -------------------------------🚀")
+  console.log("🚀 ~ containerRef:", containerRef)
+  console.log("🚀 -------------------------------🚀")
+  const [page, setPage] = React.useState(1);
   const onCancel = () => {
     setIsOpen(false);
   };
+  const { isFetching, data } = useGetAllImageQuery({
+    params: {
+      limit: 12,
+      page
+    }
+  })
+  const imageList = data?.data?.items || [];
+  useEffect(() => {
+    const onScroll = () => {
+      const scrolledToBottom =10;
+      console.log("🚀 -------------------------🚀sds", containerRef.current?.offsetHeight)
+      if (scrolledToBottom && !isFetching) {
+        setPage(page + 1);
+      }
+    };
+
+    document?.addEventListener("scroll", onScroll);
+
+    return function () {
+      document?.removeEventListener("scroll", onScroll);
+    };
+  }, [page, isFetching]);
+
   const uploadProps: UploadProps = {
     name: 'file',
     multiple: false,
@@ -108,7 +138,7 @@ const ImageLibary: React.FC<ImageLibaryProps> = ({ insertImage, isOpen, setIsOpe
       footer={false}
       centered
     >
-      <div className="h-[700px] overflow-y-scroll">
+      <div className="h-[700px] overflow-y-scroll" id={imgLibaryId}>
         <div className="mb-4">
           <Upload.Dragger
             {...uploadProps}

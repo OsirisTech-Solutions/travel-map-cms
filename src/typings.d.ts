@@ -90,6 +90,7 @@ declare module MapboxT {
 }
 
 declare module REQUEST_DEFIND {
+  // AUTH
   export type LoginRequestBody = {
     username: string;
     password: string;
@@ -97,11 +98,24 @@ declare module REQUEST_DEFIND {
   export type GetUserRequestParam = {
     id: string;
   };
+  // FILE
+  export type GetAllImageRequestParam = {
+    page?: number;
+    limit?: number;
+  };
 }
 // SCHEMA
 declare module SCHEMA {
   export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
+  }
+  export interface File {
+    createdAt: string;
+    id: string;
+    name: string;
+    originalName: string;
+    type: string;
+    updatedAt: string;
   }
 }
