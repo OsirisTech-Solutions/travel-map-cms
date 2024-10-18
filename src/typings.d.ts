@@ -18,6 +18,8 @@ declare module 'react-fittext';
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 declare const REACT_MAPBOX_ACCESS_TOKEN: string;
 declare const REACT_API_URL: string;
+declare const REACT_EDITOR_KEY: string;
+declare const REACT_CDN_URL: string;
 declare module MapboxT {
   interface SearchConfig {
     language?: string;
@@ -90,6 +92,15 @@ declare module MapboxT {
 }
 
 declare module REQUEST_DEFIND {
+  // COMMON
+  export type GetListRequestParam = {
+    page: number;
+    limit: number;
+  };
+  export type CRUDRequestParam = {
+    id: string;
+  };
+  // AUTH
   export type LoginRequestBody = {
     username: string;
     password: string;
@@ -97,11 +108,50 @@ declare module REQUEST_DEFIND {
   export type GetUserRequestParam = {
     id: string;
   };
+  // FILE
+  export type GetAllImageRequestParam = {
+    page?: number;
+    limit?: number;
+  };
+  export type UploadFileRequestBody = {
+    file: File;
+  };
+  export type CRUDPlaceRequestBody = Omit<SCHEMA.Place, 'id' | 'createdAt' | 'updatedAt'>;
 }
 // SCHEMA
 declare module SCHEMA {
   export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
+  }
+  export interface File {
+    createdAt: string;
+    id: string;
+    name: string;
+    originalName: string;
+    type: string;
+    updatedAt: string;
+  }
+  export interface Category {
+    createdAt: string;
+    description: string;
+    id: string;
+    name: string;
+    slug: string;
+    thumbnail: string;
+    updatedAt: string;
+  }
+  export interface Place {
+    categoryId: string;
+    content: string;
+    createdAt: string;
+    description: string;
+    id: string;
+    lat: string;
+    long: string;
+    name: string;
+    slug: string;
+    thumbnail: string;
+    updatedAt: string;
   }
 }

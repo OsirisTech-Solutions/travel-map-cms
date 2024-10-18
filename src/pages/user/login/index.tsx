@@ -73,9 +73,6 @@ const Login: React.FC = () => {
       },
     });
     if ('data' in res) {
-      console.log('🚀 -------------------------🚀');
-      console.log('🚀 ~ fetchUserInfo ~ s:', res);
-      console.log('🚀 -------------------------🚀');
       flushSync(() => {
         Cookies.set(KEYS.ACCESS_TOKEN, res?.data?.data?.accessToken || '');
         setInitialState((s) => ({

@@ -1,27 +1,56 @@
 import { baseAPI } from '@/redux/baseApi';
+import { MethodType, RequestT, ResponseT } from '@/redux/type';
 
-const guestApi = baseAPI
+export const UploadTags = {
+  namespace: 'FILE',
+  method: [],
+};
+const FILEApi = baseAPI
   .enhanceEndpoints({
-    addTagTypes: ['GUEST'],
+    addTagTypes: ['FILE'],
   })
   .injectEndpoints({
     endpoints: (builder) => ({
-      uploadFile: builder.mutation<any, any>({
+      uploadFile: builder.mutation<
+        ResponseT<{ fileName: string }>,
+        RequestT<REQUEST_DEFIND.UploadFileRequestBody, undefined>
+      >({
         query: (data) => {
+          console.log(data);
           const formData = new FormData();
-          formData.append('file', data.file);
+          formData.append('file', data?.body?.file as File);
           return {
-            url: ``,
+            url: `/file/upload`,
             method: 'post',
             body: formData,
           };
         },
-        extraOptions: {
-          url: 'http://furryfam.store/api/cms/file/upload',
+        invalidatesTags: ['FILE'],
+      }),
+      getAllImage: builder.query<
+        ResponseT<{ items: SCHEMA.File[]; total: number }>,
+        RequestT<undefined, REQUEST_DEFIND.GetAllImageRequestParam>
+      >({
+        query: (data) => ({
+          url: '/file',
+          method: MethodType.GET,
+          params: data?.params,
+        }),
+        // Only have one cache entry because the arg always maps to one string
+        serializeQueryArgs: ({ endpointName }) => {
+          return endpointName;
         },
-        invalidatesTags: ['GUEST'],
+        // Always merge incoming data to the cache entry
+        merge: (currentCache, newItems) => {
+          currentCache.data?.items.push(...newItems.data?.items);
+        },
+        // Refetch when the page arg changes
+        forceRefetch({ currentArg, previousArg }) {
+          return currentArg !== previousArg;
+        },
+        providesTags: ['FILE'],
       }),
     }),
   });
 
-export const { useUploadFileMutation } = guestApi;
+export const { useUploadFileMutation, useGetAllImageQuery, useLazyGetAllImageQuery } = FILEApi;

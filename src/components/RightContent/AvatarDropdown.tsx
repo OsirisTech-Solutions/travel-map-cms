@@ -1,7 +1,9 @@
+import { KEYS } from '@/utils/constant';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import { Spin } from 'antd';
 import { createStyles } from 'antd-style';
+import Cookies from 'js-cookie';
 import { stringify } from 'querystring';
 import React, { useCallback } from 'react';
 import { flushSync } from 'react-dom';
@@ -15,7 +17,7 @@ export type GlobalHeaderRightProps = {
 export const AvatarName = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  return <span className="anticon">Semati</span>;
+  return <span className="anticon">{currentUser?.name || 'Sema'}</span>;
 };
 
 const useStyles = createStyles(({ token }) => {
@@ -43,7 +45,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
   const logout = async () => {
     const { search, pathname } = window.location;
     const urlParams = new URL(window.location.href).searchParams;
-    localStorage.clear();
+    Cookies.remove(KEYS.ACCESS_TOKEN);
+    Cookies.remove(KEYS.UID);
+    Cookies.remove(KEYS.REFRESH_TOKEN);
     /** This method will redirect to the location of the redirect parameter */
     const redirect = urlParams.get('redirect');
     // Note: There may be security issues, please note

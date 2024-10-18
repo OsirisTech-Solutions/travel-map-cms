@@ -6,8 +6,6 @@ import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
 import Cookies from 'js-cookie';
 import defaultSettings from '../config/defaultSettings';
-import { guestApi } from './redux/services/authApi';
-import { store } from './redux/store';
 import { KEYS } from './utils/constant';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -24,20 +22,20 @@ export async function getInitialState(): Promise<{
   const fetchUserInfo = async () => {
     const id = Cookies.get(KEYS.UID) || '';
     try {
-      const res = await store.dispatch(
-        guestApi.endpoints.getUser.initiate({
-          params: {
-            id,
-          },
-        }),
-      );
-      if ('data' in res) {
-        return res?.data;
-      }
+      // const res = await store.dispatch(
+      //   guestApi.endpoints.getUser.initiate({
+      //     params: {
+      //       id,
+      //     },
+      //   }),
+      // );
+      // if ('data' in res) {
+      //   return res?.data;
+      // }
     } catch (error) {
-      // history.push(loginPath);
+      history.push(loginPath);
     }
-    return undefined;
+    return {};
   };
 
   const { location } = history;
@@ -70,9 +68,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      // if (!initialState?.currentUser && location.pathname !== loginPath) {
-      //   history.push(loginPath);
-      // }
+      if (!initialState?.currentUser && location.pathname !== loginPath) {
+        history.push(loginPath);
+      }
     },
     bgLayoutImgList: [
       {
