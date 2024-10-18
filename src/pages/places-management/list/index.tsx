@@ -99,6 +99,7 @@ const List = () => {
             zoom: 10.12,
             minZoom: 8,
             maxZoom: 14,
+            style: 'mapbox://styles/mapbox/satellite-streets-v12'
           }}
         />
       </Card>

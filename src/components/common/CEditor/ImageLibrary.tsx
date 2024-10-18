@@ -140,7 +140,7 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
                 chooseImage={(url: string) => {
                   insertImage?.(REACT_CDN_URL + url);
                 }}
-                src={img.url}
+                src={REACT_CDN_URL + img.name}
               />
             </div>
           );
