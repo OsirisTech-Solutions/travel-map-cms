@@ -1,7 +1,7 @@
 import CEditor from '@/components/common/CEditor';
 import Library from '@/components/common/Library';
 import { useGetListCategoryQuery } from '@/redux/services/categoryApi';
-import { useCreatePlaceMutation } from '@/redux/services/placeApi';
+import { useCreatePlaceMutation, useUpdatePlaceMutation } from '@/redux/services/placeApi';
 import {
   Button,
   Drawer,
@@ -30,6 +30,7 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
   const [form] = Form.useForm();
 
   const [createPlaceMutation] = useCreatePlaceMutation();
+  const [updatePlaceMutation] = useUpdatePlaceMutation();
 
   const getListCategoryQuery = useGetListCategoryQuery({
     params: {
@@ -37,6 +38,10 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
       page: 1,
     },
   });
+  const onClose = () => {
+    handleClose();
+    form.resetFields()
+  }
 
   const onSubmit = async (values: REQUEST_DEFIND.CRUDPlaceRequestBody) => {
     if (!record) {
@@ -49,9 +54,31 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
       });
       if ('data' in res) {
         message.success('Tạo địa danh thành công');
-        handleClose();
+      }
+      if ('error' in res) {
+        message.error('Tạo địa danh thất bại');
+      }
+    } else {
+      // update
+      console.log('update', values);
+      const res = await updatePlaceMutation({
+        body: {
+          ...values,
+          lat: '' + values?.lat,
+          long: '' + values?.long,
+        },
+        params: {
+          id: record.id,
+        }
+      })
+      if ('data' in res) {
+        message.success('Cập nhật địa danh thành công');
+      }
+      if ('error' in res) {
+        message.error('Tạo địa danh thất bại');
       }
     }
+    onClose();
   };
 
   useEffect(() => {
@@ -59,6 +86,11 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
       form.setFieldsValue({
         lat: record?.lat,
         long: record?.long,
+        categoryId: record?.categoryId,
+        thumbnail: record?.thumbnail,
+        name: record?.name,
+        description: record?.description,
+        content: record?.content,
       });
     } else if (currentLocation) {
       form.setFieldsValue({
@@ -75,6 +107,7 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
       width={'100%'}
       forceRender
       {...props}
+      onClose={onClose}
     >
       <div style={{ marginBottom: '1.5rem' }}>
         <Space>
@@ -148,7 +181,7 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
             >
               Lưu vị trí
             </Button>
-            <Button>Hủy</Button>
+            <Button onClick={onClose}>Hủy</Button>
           </div>
         </Form.Item>
       </Form>

@@ -49,7 +49,7 @@ export const categoryApi = baseAPI
       >({
         query: (data) => ({
           url: `/place/${data?.params?.id}`,
-          method: MethodType.GET,
+          method: MethodType.PATCH,
           body: data?.body,
         }),
         invalidatesTags: [CategoryTags.namespace],

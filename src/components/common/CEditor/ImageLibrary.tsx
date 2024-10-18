@@ -92,7 +92,7 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
     if (data?.data?.items && !isFetching && (data?.data?.total || 0) > libraryData.items.length) {
       setPage(page + 1);
     }
-  }, [isFetching]);
+  }, [isFetching, data, libraryData]);
   const onCancel = () => {
     setIsOpen(false);
     setPage(1);
