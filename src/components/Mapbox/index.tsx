@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { forwardRef, ForwardRefRenderFunction, useEffect, useRef } from 'react';
+import { forwardRef, ForwardRefRenderFunction, memo, useEffect, useRef } from 'react';
 type MapProps = {
   className?: string;
   initOptions?: Omit<mapboxgl.MapOptions, 'container'> & { container?: HTMLElement | string };
@@ -71,4 +71,4 @@ const Mapbox: ForwardRefRenderFunction<mapboxgl.Map, MapProps> = (
   );
 };
 
-export default forwardRef(Mapbox);
+export default memo(forwardRef(Mapbox));

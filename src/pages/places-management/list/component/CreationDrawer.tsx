@@ -40,8 +40,8 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
   });
   const onClose = () => {
     handleClose();
-    form.resetFields()
-  }
+    form.resetFields();
+  };
 
   const onSubmit = async (values: REQUEST_DEFIND.CRUDPlaceRequestBody) => {
     if (!record) {
@@ -69,8 +69,8 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
         },
         params: {
           id: record.id,
-        }
-      })
+        },
+      });
       if ('data' in res) {
         message.success('Cập nhật địa danh thành công');
       }
@@ -94,8 +94,8 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
       });
     } else if (currentLocation) {
       form.setFieldsValue({
-        lat: (currentLocation as any)?.[0],
-        long: (currentLocation as any)?.[1],
+        long: (currentLocation as any)?.[0],
+        lat: (currentLocation as any)?.[1],
       });
     }
   }, [record, currentLocation]);

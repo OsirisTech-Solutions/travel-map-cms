@@ -12,7 +12,7 @@ export const categoryApi = baseAPI
   .injectEndpoints({
     endpoints: (builder) => ({
       getListPlace: builder.query<
-        ResponseT<{ items: any[]; total: number }>,
+        ResponseT<{ items: SCHEMA.Place[]; total: number }>,
         RequestT<undefined, REQUEST_DEFIND.GetListRequestParam>
       >({
         query: (data) => ({
