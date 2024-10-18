@@ -9,9 +9,6 @@ type LibraryProps = {
   onChange?: (value: string | undefined) => void;
 };
 const Library: React.FC<LibraryProps> = ({ id, value, onChange }) => {
-  console.log("🚀 -----------------🚀")
-  console.log("🚀 ~ value:", value)
-  console.log("🚀 -----------------🚀")
   const [isOpen, setIsOpen] = React.useState(false);
   const [url, setUrl] = React.useState<string | undefined>(value);
   const onOpen = () => {
@@ -29,7 +26,7 @@ const Library: React.FC<LibraryProps> = ({ id, value, onChange }) => {
           deleteImage={() => handleChange(undefined)}
           width={150}
           height={200}
-          src={url || value}
+          src={REACT_CDN_URL + (url || value)}
         />
       ) : (
         <Button onClick={onOpen}>Chọn ảnh</Button>

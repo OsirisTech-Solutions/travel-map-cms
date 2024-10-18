@@ -2,29 +2,41 @@ import CTable from '@/components/common/CTable';
 import { useGetListCategoryQuery } from '@/redux/services/categoryApi';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
-import { Button, Space, Tag } from 'antd';
+import { Button, Image, Space, Tag } from 'antd';
 import React from 'react';
 
 const PlaceTable: React.FC<
-  TableProps
-  & { onEdit: (record: SCHEMA.Place) => void, onDelete: (record: SCHEMA.Place) => void }
+  TableProps & { onEdit: (record: SCHEMA.Place) => void; onDelete: (record: SCHEMA.Place) => void }
 > = ({ onEdit, onDelete, ...props }) => {
   const getListCategoryQuery = useGetListCategoryQuery({
     params: {
       limit: 100,
-      page: 1
-    }
-  })
+      page: 1,
+    },
+  });
   const getNameCategory = (id: string) => {
     const category = getListCategoryQuery.data?.data?.items.find((item) => item.id === id);
     return category?.name;
-  }
+  };
   const columns: TableProps<SCHEMA.Place>['columns'] = [
     {
       title: 'Tên địa danh',
       dataIndex: 'name',
       key: 'name',
       render: (text) => <div>{text}</div>,
+    },
+    {
+      title: 'Ảnh thumbnail',
+      dataIndex: 'thumbnail',
+      key: 'thumbnail',
+      render: (value) => (
+        <Image
+          preview
+          width={80}
+          height={80}
+          src={REACT_CDN_URL + value}
+        />
+      ),
     },
     {
       title: 'Mô tả',
@@ -36,8 +48,8 @@ const PlaceTable: React.FC<
       dataIndex: 'categoryId',
       key: 'categoryId',
       render: (value) => {
-        return <Tag color='cyan'>{getNameCategory(value)}</Tag>
-      }
+        return <Tag color="cyan">{getNameCategory(value)}</Tag>;
+      },
     },
     // {
     //   title: 'Trạng thái',
@@ -50,7 +62,7 @@ const PlaceTable: React.FC<
       render: (_, record) => (
         <Space size="small">
           <Button
-            size='small'
+            size="small"
             icon={<EditOutlined />}
             onClick={(e) => {
               e.stopPropagation();
@@ -58,9 +70,10 @@ const PlaceTable: React.FC<
             }}
           />
           <Button
-            size='small'
+            size="small"
+            color="danger"
+            className="text-red-600"
             icon={<DeleteOutlined />}
-            color='danger'
             onClick={(e) => {
               e.stopPropagation();
               onDelete(record);
@@ -76,7 +89,7 @@ const PlaceTable: React.FC<
       columns={columns}
       {...props}
     />
-  )
+  );
 };
 
 export default PlaceTable;

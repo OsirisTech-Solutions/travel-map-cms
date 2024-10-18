@@ -91,6 +91,7 @@ const List = () => {
   // listen zoom event on map
   useEffect(() => {
     const resizeMarker = () => {
+      const zoomValue = 9;
       const zoom = mapRef.current?.getZoom() || 0;
       const newSize = Math.max(10, zoom * 5); // Adjust the multiplier as needed
       markers.current.forEach((markerEl) => {
@@ -98,6 +99,11 @@ const List = () => {
           markerEl.style.width = `${newSize}px`;
           markerEl.style.height = `${newSize}px`;
         }
+      });
+      const allTitleMarker = document.querySelectorAll('.title-marker');
+      allTitleMarker.forEach((titleMarker) => {
+        if (zoom <= zoomValue) (titleMarker as HTMLElement).style.opacity = '0';
+        if (zoom > zoomValue) (titleMarker as HTMLElement).style.opacity = '1';
       });
     };
     const onZoom = () => {
@@ -118,7 +124,7 @@ const List = () => {
             lat: Number(item.lat),
             lng: Number(item.long),
             content: {
-              url: item.thumbnail,
+              url: REACT_CDN_URL + item.thumbnail,
               name: item.name,
             },
           }),
@@ -129,6 +135,23 @@ const List = () => {
 
   return (
     <>
+      <Card
+        size="small"
+        className={cx([styles.section])}
+        title={`Tất cả địa điểm(${getListPlaceQuery?.data?.data?.total})`}
+      >
+        <Mapbox
+          ref={mapRef}
+          className={styles.map}
+          initOptions={{
+            center: [105.84713, 21.030653],
+            zoom: 8,
+            minZoom: 8,
+            maxZoom: 14,
+            style: 'mapbox://styles/mapbox/satellite-streets-v12',
+          }}
+        />
+      </Card>
       <Card
         size="small"
         title="Danh sách địa danh"
@@ -148,23 +171,6 @@ const List = () => {
             onChange: (page) => {
               setPage(page);
             },
-          }}
-        />
-      </Card>
-      <Card
-        size="small"
-        className={cx([styles.section])}
-        title={`Tất cả địa điểm(${getListPlaceQuery?.data?.data?.total})`}
-      >
-        <Mapbox
-          ref={mapRef}
-          className={styles.map}
-          initOptions={{
-            center: [105.84713, 21.030653],
-            zoom: 10.12,
-            minZoom: 8,
-            maxZoom: 14,
-            style: 'mapbox://styles/mapbox/satellite-streets-v12',
           }}
         />
       </Card>
