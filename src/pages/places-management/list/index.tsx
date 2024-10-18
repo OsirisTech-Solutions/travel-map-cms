@@ -1,10 +1,10 @@
 import Mapbox from '@/components/Mapbox';
+import { useGetListPlaceQuery } from '@/redux/services/placeApi';
 import { Card } from 'antd';
 import { createStyles } from 'antd-style';
 import React, { useEffect } from 'react';
 import CreationDrawer from './component/CreationDrawer';
 import PlaceTable from './component/PlaceTable';
-import { useGetListPlaceQuery } from '@/redux/services/placeApi';
 
 const PAGE_SIZE = 10;
 const useStyles = createStyles(({ token }) => {
@@ -37,17 +37,17 @@ const List = () => {
   const getListPlaceQuery = useGetListPlaceQuery({
     params: {
       limit: PAGE_SIZE,
-      page
-    }
-  })
+      page,
+    },
+  });
 
   const onEdit = (record: SCHEMA.Place) => {
     setRecord(record);
     setIsOpenModalCRUDMarker(true);
-  }
+  };
   const onDelete = (record: SCHEMA.Place) => {
     console.log('delete', record);
-  }
+  };
   const onCancel = () => {
     setIsOpenModalCRUDMarker(false);
     setRecord(undefined);
@@ -82,14 +82,14 @@ const List = () => {
             total: getListPlaceQuery?.data?.data?.total,
             onChange: (page) => {
               setPage(page);
-            }
+            },
           }}
         />
       </Card>
       <Card
         size="small"
         className={cx([styles.section])}
-        title="Tất cả địa điểm(3)"
+        title={`Tất cả địa điểm(${getListPlaceQuery?.data?.data?.total})`}
       >
         <Mapbox
           ref={mapRef}
@@ -99,7 +99,7 @@ const List = () => {
             zoom: 10.12,
             minZoom: 8,
             maxZoom: 14,
-            style: 'mapbox://styles/mapbox/satellite-streets-v12'
+            style: 'mapbox://styles/mapbox/satellite-streets-v12',
           }}
         />
       </Card>
@@ -109,7 +109,7 @@ const List = () => {
         record={record}
         currentLocation={curLocationPicker}
         onClose={onCancel}
-        title="Thêm địa danh mới"
+        title={record ? 'Chỉnh sửa địa danh' : 'Tạo mới địa danh'}
       />
     </>
   );
