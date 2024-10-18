@@ -47,11 +47,6 @@ const Scroll: React.FC<ScrollProps> = ({ children, onScroll, heightContainer }) 
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = useCallback(() => {
-    console.log(
-      'scroll',
-      scrollRef?.current?.scrollTop,
-      document.getElementById(contentImageLibraryId)?.getBoundingClientRect(),
-    );
     const realHeight =
       document.getElementById(contentImageLibraryId)?.getBoundingClientRect().height || 0;
     const scrollTop = scrollRef?.current?.scrollTop || 0;
@@ -87,17 +82,21 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
     },
   });
 
+  const [libraryData, setLibraryData] = React.useState<{ items: SCHEMA.File[]; total: number }>({
+    total: 0,
+    items: [],
+  });
+
   const [uploadFileMutation] = useUploadFileMutation();
   const onScroll = useCallback(() => {
-    if (data?.data?.items && !isFetching && (data?.data?.total || 0) > data?.data?.items?.length) {
+    if (data?.data?.items && !isFetching && (data?.data?.total || 0) > libraryData.items.length) {
       setPage(page + 1);
     }
-  }, [isFetching]);
+  }, [isFetching, data, libraryData]);
   const onCancel = () => {
     setIsOpen(false);
+    setPage(1);
   };
-  const imageList = data?.data?.items || [];
-
   const uploadProps: UploadProps = {
     name: 'file',
     multiple: false,
@@ -119,6 +118,7 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
           },
         });
         if ('data' in res) {
+          setPage(1);
           message.success('Upload ảnh thành công!');
           if (res.data?.data.fileName) insertImage?.(REACT_CDN_URL + res.data?.data.fileName);
         }
@@ -126,10 +126,11 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
       return false;
     },
   };
+
   const renderImageList = () => {
     return (
       <div className={styles.libaryContainer}>
-        {imageList?.map((img: any, idx: number) => {
+        {libraryData?.items?.map((img: any, idx: number) => {
           return (
             <div
               key={idx}
@@ -138,7 +139,7 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
               <ImageItem
                 className="rounded-lg"
                 chooseImage={(url: string) => {
-                  insertImage?.(REACT_CDN_URL + url);
+                  insertImage?.(url);
                 }}
                 src={REACT_CDN_URL + img.name}
               />
@@ -148,6 +149,19 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
       </div>
     );
   };
+
+  useEffect(() => {
+    if (data?.data && page !== 1) {
+      setLibraryData({
+        items: [...libraryData.items, ...data.data.items],
+        total: data.data.total,
+      });
+      return;
+    }
+    if (data?.data && page === 1) {
+      setLibraryData(data.data);
+    }
+  }, [data]);
   return (
     <CModal
       title="Thư viện ảnh"

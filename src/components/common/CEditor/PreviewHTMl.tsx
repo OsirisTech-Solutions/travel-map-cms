@@ -6,9 +6,6 @@ type PreviewHTMlProps = {
   richText: string;
 } & ModalProps;
 const PreviewHTMl: React.FC<PreviewHTMlProps> = ({ richText, ...props }) => {
-  console.log('🚀 -----------------------🚀');
-  console.log('🚀 ~ richText:', richText);
-  console.log('🚀 -----------------------🚀');
   return (
     <CModal
       centered
@@ -22,7 +19,12 @@ const PreviewHTMl: React.FC<PreviewHTMlProps> = ({ richText, ...props }) => {
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(richText) }}
       ></div>
       <div className="text-right mt-4">
-        <Button type="primary">Đóng prevew</Button>
+        <Button
+          type="primary"
+          onClick={props.onCancel}
+        >
+          Đóng preview
+        </Button>
       </div>
     </CModal>
   );

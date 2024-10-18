@@ -89,7 +89,7 @@ const List = () => {
       <Card
         size="small"
         className={cx([styles.section])}
-        title="Tất cả địa điểm(3)"
+        title={`Tất cả địa điểm(${getListPlaceQuery?.data?.data?.total})`}
       >
         <Mapbox
           ref={mapRef}
@@ -109,7 +109,7 @@ const List = () => {
         record={record}
         currentLocation={curLocationPicker}
         onClose={onCancel}
-        title="Thêm địa danh mới"
+        title={record ? 'Chỉnh sửa địa danh' : 'Tạo mới địa danh'}
       />
     </>
   );
