@@ -94,8 +94,8 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
       });
     } else if (currentLocation) {
       form.setFieldsValue({
-        lat: (currentLocation as any)?.[0],
-        long: (currentLocation as any)?.[1],
+        long: (currentLocation as any)?.[0],
+        lat: (currentLocation as any)?.[1],
       });
     }
   }, [record, currentLocation]);

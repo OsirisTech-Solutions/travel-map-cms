@@ -1,7 +1,9 @@
 import Mapbox from '@/components/Mapbox';
-import { useGetListPlaceQuery } from '@/redux/services/placeApi';
-import { Card } from 'antd';
+import useMarker from '@/components/Mapbox/hooks/useMarker';
+import { useDelelePlaceByIdMutation, useGetListPlaceQuery } from '@/redux/services/placeApi';
+import { Card, message, Modal } from 'antd';
 import { createStyles } from 'antd-style';
+import { MapMouseEvent } from 'mapbox-gl';
 import React, { useEffect } from 'react';
 import CreationDrawer from './component/CreationDrawer';
 import PlaceTable from './component/PlaceTable';
@@ -27,7 +29,12 @@ const List = () => {
   const mapRef = React.useRef<mapboxgl.Map>(null);
   const { styles, cx } = useStyles();
   const [page, setPage] = React.useState(1);
+  const markers = React.useRef<(HTMLDivElement | undefined)[]>([]);
   const [record, setRecord] = React.useState<SCHEMA.Place | undefined>(undefined);
+
+  const { addMarker } = useMarker({ ref: mapRef });
+
+  const [deletePlaceByIdMutation] = useDelelePlaceByIdMutation();
 
   const [curLocationPicker, setCurLocationPicker] = React.useState<mapboxgl.LngLatLike | undefined>(
     undefined,
@@ -41,12 +48,28 @@ const List = () => {
     },
   });
 
-  const onEdit = (record: SCHEMA.Place) => {
-    setRecord(record);
+  const onEdit = (data: SCHEMA.Place) => {
+    setRecord(data);
     setIsOpenModalCRUDMarker(true);
   };
-  const onDelete = (record: SCHEMA.Place) => {
-    console.log('delete', record);
+  const onDelete = (data: SCHEMA.Place) => {
+    Modal.confirm({
+      title: 'Xác nhận xóa',
+      content: 'Bạn có chắc chắn muốn xóa địa danh này không?',
+      onOk: async () => {
+        const res = await deletePlaceByIdMutation({
+          params: {
+            id: data.id,
+          },
+        });
+        if ('data' in res) {
+          message.success('Xóa thành công');
+        }
+        if ('error' in res) {
+          message.error('Xóa thất bại');
+        }
+      },
+    });
   };
   const onCancel = () => {
     setIsOpenModalCRUDMarker(false);
@@ -56,11 +79,53 @@ const List = () => {
 
   // listen click event on map
   useEffect(() => {
-    mapRef.current?.on('click', (e) => {
+    const onClickMap = (e: MapMouseEvent) => {
       setCurLocationPicker([e.lngLat.lng, e.lngLat.lat]);
       setIsOpenModalCRUDMarker(true);
-    });
+    };
+    mapRef.current?.on('click', onClickMap);
+    return () => {
+      if (mapRef.current) mapRef.current?.off('click', onClickMap);
+    };
   }, []);
+  // listen zoom event on map
+  useEffect(() => {
+    const resizeMarker = () => {
+      const zoom = mapRef.current?.getZoom() || 0;
+      const newSize = Math.max(10, zoom * 5); // Adjust the multiplier as needed
+      markers.current.forEach((markerEl) => {
+        if (markerEl) {
+          markerEl.style.width = `${newSize}px`;
+          markerEl.style.height = `${newSize}px`;
+        }
+      });
+    };
+    const onZoom = () => {
+      resizeMarker();
+    };
+    mapRef.current?.on('zoom', onZoom);
+    return () => {
+      if (mapRef.current) mapRef.current?.off('zoom', onZoom);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (getListPlaceQuery.data && mapRef.current) {
+      const items = getListPlaceQuery.data.data.items;
+      items?.forEach((item) => {
+        markers.current.push(
+          addMarker({
+            lat: Number(item.lat),
+            lng: Number(item.long),
+            content: {
+              url: item.thumbnail,
+              name: item.name,
+            },
+          }),
+        );
+      });
+    }
+  }, [getListPlaceQuery.data]);
 
   return (
     <>
