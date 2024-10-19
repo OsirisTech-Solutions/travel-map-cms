@@ -18,7 +18,6 @@ export const baseQuery = ({ url }: { url?: string }) =>
       const token = Cookies.get(KEYS.ACCESS_TOKEN);
       if (token) {
         headers.set('authorization', `${token}`);
-        headers.set('Content-Type', 'application/json');
       }
       return headers;
     },
