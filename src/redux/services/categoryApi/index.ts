@@ -11,7 +11,10 @@ export const categoryApi = baseAPI
   })
   .injectEndpoints({
     endpoints: (builder) => ({
-      getListCategory: builder.query<ResponseT<{items: SCHEMA.Category[], total: number}>, RequestT<undefined, REQUEST_DEFIND.GetListRequestParam>>({
+      getListCategory: builder.query<
+        ResponseT<{ items: SCHEMA.Category[]; total: number }>,
+        RequestT<undefined, REQUEST_DEFIND.GetListRequestParam>
+      >({
         query: (data) => ({
           url: `/category`,
           method: MethodType.GET,

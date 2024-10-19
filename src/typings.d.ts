@@ -132,6 +132,14 @@ declare module SCHEMA {
     type: string;
     updatedAt: string;
   }
+  export interface User {
+    createdAt: string;
+    id: string;
+    role: number;
+    status: number;
+    updatedAt: string;
+    username: string;
+  }
   export interface Category {
     createdAt: string;
     description: string;

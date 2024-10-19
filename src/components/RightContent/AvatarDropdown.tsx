@@ -1,13 +1,13 @@
+import { KEYS } from '@/utils/constant';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import { Spin } from 'antd';
 import { createStyles } from 'antd-style';
+import Cookies from 'js-cookie';
 import { stringify } from 'querystring';
 import React, { useCallback } from 'react';
 import { flushSync } from 'react-dom';
 import HeaderDropdown from '../HeaderDropdown';
-import Cookies from 'js-cookie';
-import { KEYS } from '@/utils/constant';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -17,7 +17,10 @@ export type GlobalHeaderRightProps = {
 export const AvatarName = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  return <span className="anticon">{currentUser?.name || 'Sema'}</span>;
+  console.log('🚀 ------------------------------------------🚀');
+  console.log('🚀 ~ AvatarName ~ currentUser:', currentUser);
+  console.log('🚀 ------------------------------------------🚀');
+  return <span className="anticon">{currentUser?.username || 'Unknowm'}</span>;
 };
 
 const useStyles = createStyles(({ token }) => {

@@ -39,7 +39,7 @@ export const baseQueryWithReauth: BaseQueryFn<
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
-        // const refreshResult: any = await baseQuery('/refreshToken', api, extraOptions)
+        // const refreshResult: any = await baseQuery('/api/cms/auth/refresh-token', api, extraOptions)
         // if (refreshResult.data) {
         // api.dispatch(tokenReceived(refreshResult.data))
         // retry the initial query
