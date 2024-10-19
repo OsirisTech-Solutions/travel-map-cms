@@ -77,9 +77,6 @@ const Login: React.FC = () => {
         Cookies.set(KEYS.ACCESS_TOKEN, res?.data?.data?.accessToken || '');
         setInitialState((s) => ({
           ...s,
-          currentUser: {
-            name: 'root',
-          },
         }));
       });
       message.success('Đăng nhâp thành công');
@@ -106,12 +103,7 @@ const Login: React.FC = () => {
         </title>
       </Helmet>
       <Lang />
-      <div
-        style={{
-          flex: '1',
-          padding: '32px 0',
-        }}
-      >
+      <div className="flex-1 p-8">
         <LoginForm
           contentStyle={{
             minWidth: 280,

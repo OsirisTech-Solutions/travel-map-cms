@@ -3,3 +3,7 @@ export enum KEYS {
   UID = 'uid',
   REFRESH_TOKEN = 'refresh_token',
 }
+export enum UserStatus {
+  ACTIVE = 1,
+  BLOCK = 2,
+}

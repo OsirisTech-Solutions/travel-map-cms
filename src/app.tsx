@@ -5,7 +5,10 @@ import { PageLoading, SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 import defaultSettings from '../config/defaultSettings';
+import { guestApi } from './redux/services/authApi';
+import { store } from './redux/store';
 import { KEYS } from './utils/constant';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -20,18 +23,18 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<any | undefined>;
 }> {
   const fetchUserInfo = async () => {
-    const id = Cookies.get(KEYS.UID) || '';
+    const data: { id: string } = jwtDecode(Cookies.get(KEYS.ACCESS_TOKEN) || '');
     try {
-      // const res = await store.dispatch(
-      //   guestApi.endpoints.getUser.initiate({
-      //     params: {
-      //       id,
-      //     },
-      //   }),
-      // );
-      // if ('data' in res) {
-      //   return res?.data;
-      // }
+      const res = await store.dispatch(
+        guestApi.endpoints.getUser.initiate({
+          params: {
+            id: data?.id,
+          },
+        }),
+      );
+      if ('data' in res) {
+        return res?.data?.data;
+      }
     } catch (error) {
       history.push(loginPath);
     }

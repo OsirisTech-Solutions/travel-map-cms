@@ -14,6 +14,8 @@ export default {
   'menu.dashboard.workplace': 'Nơi làm việc',
   'menu.places-management': 'Quản lý địa danh',
   'menu.places-management.list': 'Danh sách',
+  'menu.user-management': 'Quản lý người dùng',
+  'menu.user-management.list': 'Danh sách',
   'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',

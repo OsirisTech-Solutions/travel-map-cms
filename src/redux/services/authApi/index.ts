@@ -22,7 +22,10 @@ export const guestApi = baseAPI
         }),
         invalidatesTags: [],
       }),
-      getUser: builder.query<any, RequestT<undefined, REQUEST_DEFIND.GetUserRequestParam>>({
+      getUser: builder.query<
+        ResponseT<SCHEMA.User>,
+        RequestT<undefined, REQUEST_DEFIND.GetUserRequestParam>
+      >({
         query: (data) => ({
           url: `user/${data?.params?.id}`,
           method: MethodType.GET,

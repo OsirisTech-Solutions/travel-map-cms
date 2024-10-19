@@ -65,6 +65,7 @@ export default [
           // places management
           routes.tourism,
           routes.places,
+          routes.user,
           {
             path: '/form',
             icon: 'form',

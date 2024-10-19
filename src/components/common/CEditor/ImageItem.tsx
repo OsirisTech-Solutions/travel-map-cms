@@ -10,14 +10,15 @@ const useStyles = createStyles(({ css }) => {
     `,
   };
 });
-const ImageItem: React.FC<ImageProps & { chooseImage: (url: string) => void }> = ({
+const ImageItem: React.FC<ImageProps & { chooseImage: (path: string) => void; path: string }> = ({
   chooseImage,
+  path,
   ...props
 }) => {
   const { styles } = useStyles();
   const onChooseImage = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
-    chooseImage(props.src as string);
+    chooseImage(path as string);
   };
   return (
     <Image

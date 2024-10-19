@@ -117,9 +117,15 @@ declare module REQUEST_DEFIND {
     file: File;
   };
   export type CRUDPlaceRequestBody = Omit<SCHEMA.Place, 'id' | 'createdAt' | 'updatedAt'>;
+  // user
+  export type CRUDUserRequestBody = Omit<SCHEMA.User, 'id' | 'createdAt' | 'updatedAt'>;
 }
 // SCHEMA
 declare module SCHEMA {
+  export enum UserStatus {
+    ACTIVE = 1,
+    BLOCK = 2,
+  }
   export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
@@ -131,6 +137,14 @@ declare module SCHEMA {
     originalName: string;
     type: string;
     updatedAt: string;
+  }
+  export interface User {
+    createdAt: string;
+    id: string;
+    role: number;
+    status: UserStatus;
+    updatedAt: string;
+    username: string;
   }
   export interface Category {
     createdAt: string;
