@@ -2,7 +2,7 @@ import CTable from '@/components/common/CTable';
 import { useGetListCategoryQuery } from '@/redux/services/categoryApi';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
-import { Button, Image, Space, Tag } from 'antd';
+import { Button, Image, Space, Tag, Tooltip } from 'antd';
 import React from 'react';
 
 const PlaceTable: React.FC<
@@ -61,24 +61,28 @@ const PlaceTable: React.FC<
       key: 'action',
       render: (_, record) => (
         <Space size="small">
-          <Button
-            size="small"
-            icon={<EditOutlined />}
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(record);
-            }}
-          />
-          <Button
-            size="small"
-            color="danger"
-            className="text-red-600"
-            icon={<DeleteOutlined />}
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(record);
-            }}
-          />
+          <Tooltip title="Chỉnh sửa">
+            <Button
+              size="small"
+              icon={<EditOutlined />}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(record);
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Button
+              size="small"
+              color="danger"
+              className="text-red-600"
+              icon={<DeleteOutlined />}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(record);
+              }}
+            />
+          </Tooltip>
         </Space>
       ),
     },
