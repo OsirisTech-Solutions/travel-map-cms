@@ -89,6 +89,7 @@ const Tourism = () => {
               size="small"
               icon={<DeleteOutlined />}
               color="danger"
+              className="text-red-600"
               onClick={(e) => {
                 e.stopPropagation();
                 // onDelete(record);

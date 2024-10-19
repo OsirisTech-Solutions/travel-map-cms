@@ -2,6 +2,7 @@ import { Button } from 'antd';
 import React from 'react';
 import ImageLibary from '../CEditor/ImageLibrary';
 import Thumbnail from './Thumbnail';
+import { getPathAsset } from './utils';
 
 type LibraryProps = {
   id?: string;
@@ -26,7 +27,7 @@ const Library: React.FC<LibraryProps> = ({ id, value, onChange }) => {
           deleteImage={() => handleChange(undefined)}
           width={150}
           height={200}
-          src={REACT_CDN_URL + (url || value)}
+          src={getPathAsset(url || value)}
         />
       ) : (
         <Button onClick={onOpen}>Chọn ảnh</Button>

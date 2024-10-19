@@ -43,6 +43,7 @@ const Thumbnail: React.FC<ImageProps & { deleteImage: () => void }> = ({
           </div>
         ),
       }}
+      className={'object-contain ' + (props.className || '')}
       {...props}
     />
   );
