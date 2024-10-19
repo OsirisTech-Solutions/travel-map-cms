@@ -150,10 +150,10 @@ const List = () => {
           ref={mapRef}
           className={styles.map}
           initOptions={{
-            center: [105.84713, 21.030653],
-            zoom: 8,
-            minZoom: 8,
-            maxZoom: 14,
+            center: [105.3072384, 18.9004047],
+            zoom: 9,
+            minZoom: 9,
+            maxZoom: 20,
             style: 'mapbox://styles/mapbox/satellite-streets-v12',
           }}
         />

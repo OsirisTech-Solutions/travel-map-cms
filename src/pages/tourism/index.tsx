@@ -1,5 +1,6 @@
 import CModal from '@/components/common/CModal';
 import Library from '@/components/common/Library';
+import { getPathAsset } from '@/components/common/Library/utils';
 import {
   useCreateCategoryMutation,
   useGetListCategoryQuery,
@@ -57,7 +58,7 @@ const Tourism = () => {
       render(value, record, index) {
         return (
           <img
-            src={value}
+            src={getPathAsset(value)}
             alt={value}
             style={{ width: 100 }}
           />
