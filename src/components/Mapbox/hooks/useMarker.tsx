@@ -6,9 +6,9 @@ type UseMarkerProps = {
   ref: React.MutableRefObject<mapboxgl.Map | null>;
 };
 const useMarker = ({ ref }: UseMarkerProps) => {
-  const addMarker = ({ lat, lng, content }: MarkerArgs) => {
+  const addMarker = ({ lat, lng, content, onClick }: MarkerArgs) => {
     if (ref.current) {
-      return generateNewMarker({ lat, lng, map: ref.current, content });
+      return generateNewMarker({ lat, lng, map: ref.current, content, onClick });
     }
     return undefined;
   };

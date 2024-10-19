@@ -6,4 +6,5 @@ export type MarkerArgs = {
   lat: number;
   lng: number;
   content: MarkerContent;
+  onClick?: (e: MouseEvent) => void;
 };

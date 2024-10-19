@@ -29,7 +29,7 @@ const List = () => {
   const mapRef = React.useRef<mapboxgl.Map>(null);
   const { styles, cx } = useStyles();
   const [page, setPage] = React.useState(1);
-  const markers = React.useRef<(HTMLDivElement | undefined)[]>([]);
+  const markers = React.useRef<(mapboxgl.Marker | undefined)[]>([]);
   const [record, setRecord] = React.useState<SCHEMA.Place | undefined>(undefined);
 
   const { addMarker } = useMarker({ ref: mapRef });
@@ -96,8 +96,8 @@ const List = () => {
       const newSize = Math.max(10, zoom * 5); // Adjust the multiplier as needed
       markers.current.forEach((markerEl) => {
         if (markerEl) {
-          markerEl.style.width = `${newSize}px`;
-          markerEl.style.height = `${newSize}px`;
+          markerEl.getElement().style.width = `${newSize}px`;
+          markerEl.getElement().style.height = `${newSize}px`;
         }
       });
       const allTitleMarker = document.querySelectorAll('.title-marker');
@@ -118,6 +118,8 @@ const List = () => {
   useEffect(() => {
     if (getListPlaceQuery.data && mapRef.current) {
       const items = getListPlaceQuery.data.data.items;
+      markers.current.forEach((marker) => marker?.remove());
+      markers.current = [];
       items?.forEach((item) => {
         markers.current.push(
           addMarker({
@@ -126,6 +128,10 @@ const List = () => {
             content: {
               url: REACT_CDN_URL + item.thumbnail,
               name: item.name,
+            },
+            onClick: (e) => {
+              e.stopPropagation();
+              onEdit(item);
             },
           }),
         );
