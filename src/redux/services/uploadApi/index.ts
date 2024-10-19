@@ -21,7 +21,7 @@ const FILEApi = baseAPI
           formData.append('file', data?.body?.file as File);
           return {
             url: `/file/upload`,
-            method: 'post',
+            method: MethodType.POST,
             body: formData,
           };
         },

@@ -6,9 +6,9 @@ export type ResponseT<T> = {
   data: T;
 };
 export enum MethodType {
-  POST = 'post',
-  GET = 'get',
-  PUT = 'put',
-  DELETE = 'delete',
-  PATCH = 'patch',
+  POST = 'POST',
+  GET = 'GET',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+  PATCH = 'PATCH',
 }
