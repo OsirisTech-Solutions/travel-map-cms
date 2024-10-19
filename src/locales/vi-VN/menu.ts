@@ -1,4 +1,5 @@
 export default {
+  'menu.tourism-management': 'Quản lý danh mục',
   'menu.welcome': 'Chào mừng',
   'menu.more-blocks': 'Thêm khối',
   'menu.home': 'Trang chủ',

@@ -20,8 +20,50 @@ export const categoryApi = baseAPI
           method: MethodType.GET,
           params: data?.params,
         }),
+        providesTags: [CategoryTags.namespace],
+      }),
+      createCategory: builder.mutation<
+        ResponseT<{
+          accessToken: string;
+          refreshToken: string;
+        }>,
+        RequestT<{ name: string; thumbnail: string; description: string }, any>
+      >({
+        query: (data) => ({
+          url: `/category`,
+          method: 'POST',
+          body: data?.body,
+        }),
+        invalidatesTags: [CategoryTags.namespace],
+        onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
+          const result = await queryFulfilled;
+          console.log('onQueryStarted', result);
+        },
+      }),
+      updateCategory: builder.mutation<
+        ResponseT<{
+          accessToken: string;
+          refreshToken: string;
+        }>,
+        RequestT<{ name: string; thumbnail: string; description: string }, { id: string }>
+      >({
+        query: (data) => ({
+          url: `/category/${data?.params?.id}`,
+          method: 'PATCH',
+          body: data?.body,
+        }),
+        invalidatesTags: [CategoryTags.namespace],
+        onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
+          const result = await queryFulfilled;
+          console.log('onQueryStarted', result);
+        },
       }),
     }),
   });
 
-export const { useGetListCategoryQuery, useLazyGetListCategoryQuery } = categoryApi;
+export const {
+  useGetListCategoryQuery,
+  useLazyGetListCategoryQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+} = categoryApi;

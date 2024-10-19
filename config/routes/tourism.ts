@@ -1,6 +1,6 @@
 const tourism = {
   path: '/tourism',
-  name: 'Quản lý danh mục địa danh',
+  name: 'tourism-management',
   icon: 'picture',
   routes: [
     {
