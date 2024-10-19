@@ -102,6 +102,7 @@ const List = () => {
       });
       const allTitleMarker = document.querySelectorAll('.title-marker');
       allTitleMarker.forEach((titleMarker) => {
+        (titleMarker as HTMLElement).style.top = `${newSize * 1.1}px`;
         if (zoom <= zoomValue) (titleMarker as HTMLElement).style.opacity = '0';
         if (zoom > zoomValue) (titleMarker as HTMLElement).style.opacity = '1';
       });
@@ -151,9 +152,9 @@ const List = () => {
           className={styles.map}
           initOptions={{
             center: [105.3072384, 18.9004047],
-            zoom: 9,
-            minZoom: 9,
-            maxZoom: 20,
+            zoom: 10,
+            minZoom: 8,
+            maxZoom: 18,
             style: 'mapbox://styles/mapbox/satellite-streets-v12',
           }}
         />
