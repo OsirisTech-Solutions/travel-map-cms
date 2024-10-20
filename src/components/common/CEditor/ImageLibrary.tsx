@@ -6,6 +6,7 @@ import { UploadProps } from 'antd/lib';
 import React, { useCallback, useEffect, useRef } from 'react';
 import CModal from '../CModal';
 import ImageItem from './ImageItem';
+import { getPathAsset } from '../Library/utils';
 
 type ImageLibraryProps = {
   insertImage?: (url: string | undefined) => void;
@@ -142,7 +143,7 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
                 chooseImage={(url: string) => {
                   insertImage?.(url);
                 }}
-                src={REACT_CDN_URL + img.name}
+                src={getPathAsset(img.name)}
               />
             </div>
           );

@@ -1,4 +1,5 @@
 import CTable from '@/components/common/CTable';
+import { getPathAsset } from '@/components/common/Library/utils';
 import { useGetListCategoryQuery } from '@/redux/services/categoryApi';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
@@ -34,7 +35,7 @@ const PlaceTable: React.FC<
           preview
           width={80}
           height={80}
-          src={REACT_CDN_URL + value}
+          src={getPathAsset(value)}
         />
       ),
     },

@@ -7,8 +7,9 @@ import { MapMouseEvent } from 'mapbox-gl';
 import React, { useEffect } from 'react';
 import CreationDrawer from './component/CreationDrawer';
 import PlaceTable from './component/PlaceTable';
+import { getPathAsset } from '@/components/common/Library/utils';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 50;
 const useStyles = createStyles(({ token }) => {
   return {
     map: {
@@ -127,7 +128,7 @@ const List = () => {
             lat: Number(item.lat),
             lng: Number(item.long),
             content: {
-              url: REACT_CDN_URL + item.thumbnail,
+              url: getPathAsset(item.thumbnail),
               name: item.name,
             },
             onClick: (e) => {
@@ -155,6 +156,7 @@ const List = () => {
             zoom: 10,
             minZoom: 8,
             maxZoom: 18,
+            // style: 'mapbox://styles/mapbox/satellite-v9'
             style: 'mapbox://styles/mapbox/satellite-streets-v12',
           }}
         />

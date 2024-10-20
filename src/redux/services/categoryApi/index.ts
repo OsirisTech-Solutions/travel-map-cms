@@ -58,6 +58,23 @@ export const categoryApi = baseAPI
           console.log('onQueryStarted', result);
         },
       }),
+      deleteCategory: builder.mutation<
+        ResponseT<{
+          accessToken: string;
+          refreshToken: string;
+        }>,
+        RequestT<{ id: string }, undefined>
+      >({
+        query: (data) => ({
+          url: `/category/${data?.body?.id}`,
+          method: 'DETETE',
+        }),
+        invalidatesTags: [CategoryTags.namespace],
+        onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
+          const result = await queryFulfilled;
+          console.log('onQueryStarted', result);
+        },
+      }),
     }),
   });
 
@@ -66,4 +83,5 @@ export const {
   useLazyGetListCategoryQuery,
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
 } = categoryApi;

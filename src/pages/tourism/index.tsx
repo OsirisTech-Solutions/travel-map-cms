@@ -3,11 +3,12 @@ import Library from '@/components/common/Library';
 import { getPathAsset } from '@/components/common/Library/utils';
 import {
   useCreateCategoryMutation,
+  useDeleteCategoryMutation,
   useGetListCategoryQuery,
   useUpdateCategoryMutation,
 } from '@/redux/services/categoryApi';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Flex, Form, Input, Space, Table } from 'antd';
+import { Button, Flex, Form, Input, message, Modal, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { useEffect, useState } from 'react';
 
@@ -16,6 +17,7 @@ const Tourism = () => {
   const [itemEdit, setItemEdit] = useState<SCHEMA.Category>();
   const [runCreateCategoryMutation] = useCreateCategoryMutation({});
   const [runUpdateCategoryMutation] = useUpdateCategoryMutation({});
+  const [runDeleteCategoryMutation] = useDeleteCategoryMutation({})
 
   const [form] = Form.useForm();
 
@@ -94,6 +96,24 @@ const Tourism = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 // onDelete(record);
+                console.log('record', record);
+                Modal.confirm({
+                  title: 'Xác nhận xóa',
+                  content: 'Bạn có chắc chắn muốn xóa danh mục này không?',
+                  onOk: async () => {
+                    const res = await runDeleteCategoryMutation({
+                      body: {
+                        id: record.id
+                      }
+                    });
+                    if ('data' in res) {
+                      message.success('Xóa thành công');
+                    }
+                    if ('error' in res) {
+                      message.error('Xóa thất bại');
+                    }
+                  },
+                });
               }}
             />
           </Space>
