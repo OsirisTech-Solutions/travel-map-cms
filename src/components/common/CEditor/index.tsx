@@ -27,7 +27,7 @@ export default function CEditor({ id, value, onChange }: CEditorProps) {
       editorRef.current.execCommand(
         'mceInsertContent',
         false,
-        `<img src="${path}" alt="travel" data-mce-src="${path}" style="width: 100%" />`,
+        `<img src="${REACT_CDN_URL + path}" alt="travel" data-mce-src="${REACT_CDN_URL + path}" style="width: 100%" />`,
       );
     }
   };
