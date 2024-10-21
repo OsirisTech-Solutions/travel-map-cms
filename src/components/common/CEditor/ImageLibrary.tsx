@@ -140,7 +140,7 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
                 path={img.name}
                 className="rounded-lg"
                 chooseImage={(url: string) => {
-                  insertImage?.(url);
+                  insertImage?.(REACT_CDN_URL + url);
                 }}
                 src={REACT_CDN_URL + img.name}
               />
