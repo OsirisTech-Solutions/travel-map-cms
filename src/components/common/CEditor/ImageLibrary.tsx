@@ -121,7 +121,7 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
         if ('data' in res) {
           setPage(1);
           message.success('Upload ảnh thành công!');
-          if (res.data?.data.fileName) insertImage?.(res.data?.data.fileName);
+          if (res.data?.data.fileName) insertImage?.(REACT_CDN_URL + res.data?.data.fileName);
         }
       }
       return false;
