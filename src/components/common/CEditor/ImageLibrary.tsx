@@ -76,12 +76,18 @@ const Scroll: React.FC<ScrollProps> = ({ children, onScroll, heightContainer }) 
 const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsOpen }) => {
   const { styles } = useStyles();
   const [page, setPage] = React.useState(1);
-  const { isFetching, data } = useGetAllImageQuery({
-    params: {
-      limit: 12,
-      page,
+  const { isFetching, data } = useGetAllImageQuery(
+    {
+      params: {
+        limit: 12,
+        page,
+      },
     },
-  });
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    },
+  );
 
   const [libraryData, setLibraryData] = React.useState<{ items: SCHEMA.File[]; total: number }>({
     total: 0,
@@ -120,6 +126,7 @@ const ImageLibrary: React.FC<ImageLibraryProps> = ({ insertImage, isOpen, setIsO
         });
         if ('data' in res) {
           setPage(1);
+
           message.success('Upload ảnh thành công!');
           if (res.data?.data.fileName) insertImage?.(res.data?.data.fileName);
         }
