@@ -8,11 +8,9 @@ import {
   DrawerProps,
   Form,
   Input,
+  InputNumber,
   message,
   Select,
-  Space,
-  Tag,
-  Typography,
 } from 'antd';
 import React, { useEffect } from 'react';
 
@@ -84,8 +82,8 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
   useEffect(() => {
     if (record) {
       form.setFieldsValue({
-        lat: record?.lat,
-        long: record?.long,
+        lat: Number(record?.lat),
+        long: Number(record?.long),
         categoryId: record?.categoryId,
         thumbnail: record?.thumbnail,
         name: record?.name,
@@ -100,8 +98,6 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
     }
   }, [record, currentLocation]);
 
-  const lat = Form.useWatch('lat', form);
-  const lng = Form.useWatch('long', form);
   return (
     <Drawer
       width={'100%'}
@@ -109,18 +105,56 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
       {...props}
       onClose={onClose}
     >
-      <div style={{ marginBottom: '1.5rem' }}>
-        <Space>
-          <Typography.Title level={4}>Vị trí: </Typography.Title>
-          <Tag color="blue">Lat: {lat}</Tag>
-          <Tag color="blue">Long: {lng}</Tag>
-        </Space>
-      </div>
       <Form<REQUEST_DEFIND.CRUDPlaceRequestBody>
         form={form}
         onFinish={onSubmit}
         layout="vertical"
       >
+        <div className='flex justify-between gap-4'>
+        <Form.Item
+          className='w-full'
+          label='Longitude'
+          name='long'
+          required
+          rules={[
+            {
+              required: true,
+              message: 'Vui lòng nhập longitude',
+            },
+            {
+              type: 'number',
+              message: 'Giá trị phải là số',
+            },
+            {
+              max: 180,
+              min: -180,
+              message: 'Giá trị nằm trong khoảng -180 đến 180',
+            }
+          ]}>
+          <InputNumber className='w-full' placeholder='Nhập longitude' />
+        </Form.Item>
+        <Form.Item
+          className='w-full'
+          label='Latitude'
+          name='lat'
+          required rules={[
+            {
+              required: true,
+              message: 'Vui lòng nhập longitude',
+            },
+            {
+              type: 'number',
+              message: 'Giá trị phải là số',
+            },
+            {
+              max: 90,
+              min: -90,
+              message: 'Giá trị nằm trong khoảng -90 đến 90',
+            }
+          ]}>
+          <Input className='w-full' placeholder='Nhập latitude' />
+        </Form.Item>
+      </div>
         <Form.Item
           hidden
           name="lat"
