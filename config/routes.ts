@@ -62,6 +62,7 @@ export default [
               },
             ],
           },
+          routes.home,
           // places management
           routes.tourism,
           routes.places,

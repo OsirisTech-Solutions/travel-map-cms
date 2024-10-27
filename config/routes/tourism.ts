@@ -1,7 +1,7 @@
 const tourism = {
   path: '/tourism',
   name: 'tourism-management',
-  icon: 'picture',
+  icon: 'appstore',
   routes: [
     {
       name: 'tourism',
