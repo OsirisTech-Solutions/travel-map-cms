@@ -97,7 +97,6 @@ const Analysis: FC<AnalysisProps> = () => {
   return (
     <GridContent>
       <>
-        <div className="text-red-400">asdasd</div>
         <Suspense fallback={<PageLoading />}>
           <IntroduceRow
             loading={loading}
