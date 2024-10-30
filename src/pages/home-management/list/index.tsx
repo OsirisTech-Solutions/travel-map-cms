@@ -1,30 +1,31 @@
-import { useDeleleHomeDataByIdMutation, useGetListHomeDataQuery } from '@/redux/services/homeApi'
-import { homeLineTitle, HomeLineType } from '@/utils/constant'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { useNavigate } from '@umijs/max'
-import { Button, Card, Modal, Space, Table, Tag, Tooltip } from 'antd'
-import { TableProps } from 'antd/lib'
-import React from 'react'
+import { useDeleleHomeDataByIdMutation, useGetListHomeDataQuery } from '@/redux/services/homeApi';
+import { homeLineTitle, HomeLineType } from '@/utils/constant';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { useNavigate } from '@umijs/max';
+import { Button, Card, Modal, Space, Table, Tag, Tooltip } from 'antd';
+import { TableProps } from 'antd/lib';
+import React from 'react';
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 10;
 const List = () => {
-  const [page, setPage] = React.useState(1)
-  const navigate = useNavigate()
+  const [page, setPage] = React.useState(1);
+  const navigate = useNavigate();
 
   const getListHomeDataQuery = useGetListHomeDataQuery({
     params: {
       page,
-      limit: PAGE_SIZE
-    }
-  })
-  const [deleleHomeDataByIdMutation] = useDeleleHomeDataByIdMutation()
+      limit: PAGE_SIZE,
+      sortBy: 'DESC_POSITION',
+    },
+  });
+  const [deleleHomeDataByIdMutation] = useDeleleHomeDataByIdMutation();
 
   const onEdit = (record: SCHEMA.HomeData) => {
-    navigate(`/home-management/edit/${record.id}`)
-  }
+    navigate(`/home-management/edit/${record.id}`);
+  };
   const onCreate = () => {
-    navigate('/home-management/create')
-  }
+    navigate('/home-management/create');
+  };
   const onDelete = (record: SCHEMA.HomeData) => {
     Modal.confirm({
       title: 'Xác nhận xóa',
@@ -32,12 +33,12 @@ const List = () => {
       onOk: async () => {
         await deleleHomeDataByIdMutation({
           params: {
-            id: record.id
-          }
-        })
-      }
-    })
-  }
+            id: record.id,
+          },
+        });
+      },
+    });
+  };
   const columns: TableProps<SCHEMA.HomeData>['columns'] = [
     {
       title: 'Tiêu đề',
@@ -49,21 +50,21 @@ const List = () => {
       dataIndex: 'type',
       key: 'type',
       render: (value: HomeLineType) => {
-        return <Tag color="cyan">{homeLineTitle[value]}</Tag>
-      }
+        return <Tag color="cyan">{homeLineTitle[value]}</Tag>;
+      },
     },
     {
       title: 'Vị trí',
       dataIndex: 'position',
-      key: 'position'
+      key: 'position',
     },
     {
-      title: "Hiển thị",
-      dataIndex: "visible",
-      key: "visible",
+      title: 'Hiển thị',
+      dataIndex: 'visible',
+      key: 'visible',
       render: (value: boolean) => {
-        return value ? <Tag color="green">Hiển thị</Tag> : <Tag color="gray">Ẩn</Tag>
-      }
+        return value ? <Tag color="green">Hiển thị</Tag> : <Tag color="gray">Ẩn</Tag>;
+      },
     },
     {
       title: 'Action',
@@ -95,14 +96,19 @@ const List = () => {
         </Space>
       ),
     },
-  ]
+  ];
   return (
     <>
       <Card
         title={
-          <div className='flex justify-between'>
+          <div className="flex justify-between">
             <div>Danh sách dữ liệu trang chủ</div>
-            <Button type='primary' onClick={onCreate}>Thêm mới</Button>
+            <Button
+              type="primary"
+              onClick={onCreate}
+            >
+              Thêm mới
+            </Button>
           </div>
         }
       >
@@ -114,13 +120,13 @@ const List = () => {
             total: getListHomeDataQuery?.data?.data?.total,
             pageSize: PAGE_SIZE,
             onChange: (page) => {
-              setPage(page)
-            }
+              setPage(page);
+            },
           }}
         />
       </Card>
     </>
-  )
-}
+  );
+};
 
-export default List
+export default List;

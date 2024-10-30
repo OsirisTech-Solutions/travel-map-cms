@@ -3,7 +3,6 @@ import { MethodType, RequestT, ResponseT } from '@/redux/type';
 
 export const CategoryTags = {
   namespace: 'CATEGORY',
-  method: [],
 };
 export const categoryApi = baseAPI
   .enhanceEndpoints({
@@ -13,12 +12,25 @@ export const categoryApi = baseAPI
     endpoints: (builder) => ({
       getListHomeData: builder.query<
         ResponseT<{ items: SCHEMA.HomeData[]; total: number }>,
-        RequestT<undefined, REQUEST_DEFIND.GetListRequestParam>
+        RequestT<
+          undefined,
+          REQUEST_DEFIND.GetListRequestParam & { sortBy?: 'DESC_POSITION' | 'ASC_POSITION' }
+        >
       >({
         query: (data) => ({
           url: `/home-line`,
           method: MethodType.GET,
           params: data?.params,
+        }),
+        providesTags: [CategoryTags.namespace],
+      }),
+      getHomeDataById: builder.query<
+        ResponseT<SCHEMA.HomeData>,
+        RequestT<undefined, REQUEST_DEFIND.CRUDRequestParam>
+      >({
+        query: (data) => ({
+          url: `/home-line/${data?.params?.id}`,
+          method: MethodType.GET,
         }),
         providesTags: [CategoryTags.namespace],
       }),
@@ -63,4 +75,6 @@ export const {
   useCreateHomeDataMutation,
   useDeleleHomeDataByIdMutation,
   useUpdateHomeDataMutation,
+  useGetHomeDataByIdQuery,
+  useLazyGetHomeDataByIdQuery,
 } = categoryApi;
