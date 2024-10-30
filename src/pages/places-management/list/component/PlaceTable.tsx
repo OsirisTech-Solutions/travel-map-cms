@@ -23,12 +23,15 @@ const PlaceTable: React.FC<
       title: 'Tên địa danh',
       dataIndex: 'name',
       key: 'name',
+      width: 120,
       render: (text) => <div>{text}</div>,
     },
     {
       title: 'Ảnh thumbnail',
       dataIndex: 'thumbnail',
       key: 'thumbnail',
+      width: 180,
+      align: 'center',
       render: (value) => (
         <Image
           preview

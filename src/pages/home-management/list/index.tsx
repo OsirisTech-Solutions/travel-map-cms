@@ -1,6 +1,6 @@
 import { useDeleleHomeDataByIdMutation, useGetListHomeDataQuery } from '@/redux/services/homeApi';
 import { homeLineTitle, HomeLineType } from '@/utils/constant';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from '@umijs/max';
 import { Button, Card, Modal, Space, Table, Tag, Tooltip } from 'antd';
 import { TableProps } from 'antd/lib';
@@ -100,12 +100,14 @@ const List = () => {
   return (
     <>
       <Card
+        size="small"
         title={
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center my-2">
             <div>Danh sách dữ liệu trang chủ</div>
             <Button
               type="primary"
               onClick={onCreate}
+              icon={<PlusOutlined />}
             >
               Thêm mới
             </Button>

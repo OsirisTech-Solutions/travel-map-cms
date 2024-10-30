@@ -7,7 +7,7 @@ import {
   useUpdateCategoryMutation,
 } from '@/redux/services/categoryApi';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Flex, Form, Input, Space, Table } from 'antd';
+import { Button, Card, Flex, Form, Input, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { useEffect, useState } from 'react';
 
@@ -42,7 +42,9 @@ const Tourism = () => {
       title: 'STT',
       dataIndex: 'id',
       key: 'id',
-      render(value, record, index) {
+      width: 50,
+      align: 'center',
+      render: (value, record, index) => {
         return index + 1;
       },
     },
@@ -55,7 +57,7 @@ const Tourism = () => {
       title: 'Hình ảnh',
       dataIndex: 'thumbnail',
       key: 'thumbnail',
-      render(value, record, index) {
+      render(value) {
         return (
           <img
             src={getPathAsset(value)}
@@ -69,7 +71,7 @@ const Tourism = () => {
       title: 'Chức năng',
       dataIndex: 'func',
       key: 'func',
-      render(value, record, index) {
+      render(value, record) {
         return (
           <Space size="small">
             <Button
@@ -143,68 +145,73 @@ const Tourism = () => {
   console.log('getListCategoryQuery', getListCategoryQuery);
 
   return (
-    <Flex vertical>
-      <Flex>
-        <Button
-          type="primary"
-          icon={<PlusCircleOutlined />}
-          onClick={() => {
-            form.resetFields();
-            setOpen(true);
-          }}
+    <Card
+      size="small"
+      title={
+        <div className="flex justify-between items-center my-2">
+          <div>Danh sách loại danh mục</div>
+          <Button
+            type="primary"
+            icon={<PlusCircleOutlined />}
+            onClick={() => {
+              form.resetFields();
+              setOpen(true);
+            }}
+          >
+            Thêm mới
+          </Button>
+        </div>
+      }
+    >
+      <Flex vertical>
+        <Table<SCHEMA.Category>
+          dataSource={getListCategoryQuery.data?.data?.items || []}
+          columns={columns}
+        />
+
+        <CModal
+          title="Tạo loại hình mới"
+          centered
+          open={open}
+          onOk={onSubmit}
+          onCancel={() => setOpen(false)}
         >
-          Thêm mới
-        </Button>
-      </Flex>
-
-      <Table<SCHEMA.Category>
-        dataSource={getListCategoryQuery.data?.data?.items || []}
-        columns={columns}
-      />
-
-      <CModal
-        title="Tạo loại hình mới"
-        centered
-        open={open}
-        onOk={onSubmit}
-        onCancel={() => setOpen(false)}
-      >
-        <Form
-          form={form}
-          name="wrap"
-          labelCol={{ flex: '110px' }}
-          labelAlign="left"
-          labelWrap
-          wrapperCol={{ flex: 1 }}
-          colon={false}
-          style={{ maxWidth: 600 }}
-          onFinish={submitForm}
-        >
-          <Form.Item
-            label="Tên loại hình"
-            name="title"
-            rules={[{ required: true, message: 'Nhập tên loại hình' }]}
+          <Form
+            form={form}
+            name="wrap"
+            labelCol={{ flex: '110px' }}
+            labelAlign="left"
+            labelWrap
+            wrapperCol={{ flex: 1 }}
+            colon={false}
+            style={{ maxWidth: 600 }}
+            onFinish={submitForm}
           >
-            <Input />
-          </Form.Item>
+            <Form.Item
+              label="Tên loại hình"
+              name="title"
+              rules={[{ required: true, message: 'Nhập tên loại hình' }]}
+            >
+              <Input />
+            </Form.Item>
 
-          <Form.Item
-            required
-            name="thumbnail"
-            label="Ảnh Thumbnail"
-          >
-            <Library />
-          </Form.Item>
+            <Form.Item
+              required
+              name="thumbnail"
+              label="Ảnh Thumbnail"
+            >
+              <Library />
+            </Form.Item>
 
-          <Form.Item
-            label="Mô tả"
-            name="description"
-            rules={[{ required: true, message: 'Nhập mô tả về địa danh' }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
+            <Form.Item
+              label="Mô tả"
+              name="description"
+              rules={[{ required: true, message: 'Nhập mô tả về địa danh' }]}
+            >
+              <Input.TextArea />
+            </Form.Item>
 
-          {/* <Form.Item label=" ">
+            {/* <Form.Item label=" ">
             <Button
               type="primary"
               htmlType="submit"
@@ -212,9 +219,10 @@ const Tourism = () => {
               Submit
             </Button>
           </Form.Item> */}
-        </Form>
-      </CModal>
-    </Flex>
+          </Form>
+        </CModal>
+      </Flex>
+    </Card>
   );
 };
 
