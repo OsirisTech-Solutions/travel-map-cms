@@ -119,6 +119,8 @@ declare module REQUEST_DEFIND {
   export type CRUDPlaceRequestBody = Omit<SCHEMA.Place, 'id' | 'createdAt' | 'updatedAt'>;
   // user
   export type CRUDUserRequestBody = Omit<SCHEMA.User, 'id' | 'createdAt' | 'updatedAt'>;
+  // home
+  export type CRUDHomeDataRequestBody = Omit<SCHEMA.HomeData, 'id' | 'createdAt' | 'updatedAt'>;
 }
 // SCHEMA
 declare module SCHEMA {
@@ -167,5 +169,15 @@ declare module SCHEMA {
     slug: string;
     thumbnail: string;
     updatedAt: string;
+  }
+  export interface HomeData {
+    createdAt: string;
+    id: string;
+    items: string[];
+    position: number;
+    title: string;
+    type: number;
+    updatedAt: string;
+    visible: boolean;
   }
 }

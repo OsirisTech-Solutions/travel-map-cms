@@ -7,3 +7,11 @@ export enum UserStatus {
   ACTIVE = 1,
   BLOCK = 2,
 }
+export enum HomeLineType {
+  SPOTLIGHT = 1,
+  GROUP_PLACE = 2,
+}
+export const homeLineTitle = {
+  [HomeLineType.SPOTLIGHT]: 'Spotlight',
+  [HomeLineType.GROUP_PLACE]: 'Nhóm địa danh',
+}
