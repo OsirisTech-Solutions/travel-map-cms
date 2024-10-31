@@ -7,17 +7,23 @@ import {
   useGetListCategoryQuery,
   useUpdateCategoryMutation,
 } from '@/redux/services/categoryApi';
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Flex, Form, Input, message, Modal, Space, Table } from 'antd';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PlusCircleOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import { Button, Flex, Form, Input, InputRef, Space, Table, TableColumnType } from 'antd';
+import { FilterDropdownProps } from 'antd/es/table/interface';
 import { ColumnsType } from 'antd/lib/table';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Tourism = () => {
   const [open, setOpen] = useState(false);
   const [itemEdit, setItemEdit] = useState<SCHEMA.Category>();
   const [runCreateCategoryMutation] = useCreateCategoryMutation({});
   const [runUpdateCategoryMutation] = useUpdateCategoryMutation({});
-  const [runDeleteCategoryMutation] = useDeleteCategoryMutation({})
+  const [runDeleteCategoryMutation] = useDeleteCategoryMutation({});
 
   const [form] = Form.useForm();
 
@@ -39,6 +45,69 @@ const Tourism = () => {
     setOpen(false);
   };
 
+  const searchInput = useRef<InputRef>(null);
+
+  const handleSearch = (selectedKeys: string[], confirm: FilterDropdownProps['confirm']) => {
+    confirm();
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+  };
+
+  const getColumnSearchProps = (dataIndex: string): TableColumnType<any> => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div
+        style={{ padding: 8 }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={'Tìm kiếm'}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys as string[], confirm)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            size="small"
+            type="primary"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+            }}
+          >
+            Ok
+          </Button>
+          <Button
+            onClick={() => {
+              if (!clearFilters) return;
+              handleReset(clearFilters);
+              confirm({ closeDropdown: true });
+            }}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+  });
+
   const columns: ColumnsType<SCHEMA.Category> | undefined = [
     {
       title: 'STT',
@@ -52,12 +121,13 @@ const Tourism = () => {
       title: 'Tên danh mục',
       dataIndex: 'name',
       key: 'name',
+      ...getColumnSearchProps('name'),
     },
     {
       title: 'Hình ảnh',
       dataIndex: 'thumbnail',
       key: 'thumbnail',
-      render(value, record, index) {
+      render(value) {
         return (
           <img
             src={getPathAsset(value)}
@@ -71,7 +141,7 @@ const Tourism = () => {
       title: 'Chức năng',
       dataIndex: 'func',
       key: 'func',
-      render(value, record, index) {
+      render(value, record) {
         return (
           <Space size="small">
             <Button
@@ -103,8 +173,8 @@ const Tourism = () => {
                   onOk: async () => {
                     const res = await runDeleteCategoryMutation({
                       body: {
-                        id: record.id
-                      }
+                        id: record.id,
+                      },
                     });
                     if ('data' in res) {
                       message.success('Xóa thành công');
