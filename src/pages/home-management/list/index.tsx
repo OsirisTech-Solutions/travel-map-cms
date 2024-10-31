@@ -1,10 +1,11 @@
 import { useDeleleHomeDataByIdMutation, useGetListHomeDataQuery } from '@/redux/services/homeApi';
 import { homeLineTitle, HomeLineType } from '@/utils/constant';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { useNavigate } from '@umijs/max';
-import { Button, Card, Input, Modal, Space, Table, TableColumnType, Tag, Tooltip } from 'antd';
+import { Button, Card, Input, InputRef, Modal, Space, Table, TableColumnType, Tag, Tooltip } from 'antd';
+import { FilterDropdownProps } from 'antd/es/table/interface';
 import { TableProps } from 'antd/lib';
-import React from 'react';
+import React, { useRef } from 'react';
 
 const PAGE_SIZE = 10;
 const List = () => {
@@ -19,6 +20,19 @@ const List = () => {
     },
   });
   const [deleleHomeDataByIdMutation] = useDeleleHomeDataByIdMutation();
+
+  const searchInput = useRef<InputRef>(null);
+
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: FilterDropdownProps['confirm'],
+  ) => {
+    confirm();
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+  };
 
   const getColumnSearchProps = (dataIndex: string): TableColumnType<any> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -94,6 +108,7 @@ const List = () => {
       title: 'Tiêu đề',
       dataIndex: 'title',
       key: 'title',
+      ...getColumnSearchProps('title'),
     },
     {
       title: 'Loại',
@@ -102,6 +117,17 @@ const List = () => {
       render: (value: HomeLineType) => {
         return <Tag color="cyan">{homeLineTitle[value]}</Tag>;
       },
+      filters: [
+        {
+          text: 'Nổi bật',
+          value: HomeLineType.SPOTLIGHT,
+        },
+        {
+          text: 'Nhóm địa danh',
+          value: HomeLineType.GROUP_PLACE,
+        }
+      ],
+      onFilter: (value, record) => value === record.type,
     },
     {
       title: 'Vị trí',
