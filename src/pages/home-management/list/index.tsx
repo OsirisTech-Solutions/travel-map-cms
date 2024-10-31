@@ -2,7 +2,7 @@ import { useDeleleHomeDataByIdMutation, useGetListHomeDataQuery } from '@/redux/
 import { homeLineTitle, HomeLineType } from '@/utils/constant';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate } from '@umijs/max';
-import { Button, Card, Modal, Space, Table, Tag, Tooltip } from 'antd';
+import { Button, Card, Input, Modal, Space, Table, TableColumnType, Tag, Tooltip } from 'antd';
 import { TableProps } from 'antd/lib';
 import React from 'react';
 
@@ -19,6 +19,56 @@ const List = () => {
     },
   });
   const [deleleHomeDataByIdMutation] = useDeleleHomeDataByIdMutation();
+
+  const getColumnSearchProps = (dataIndex: string): TableColumnType<any> => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={'Tìm kiếm'}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys as string[], confirm)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            size="small"
+            type='primary'
+            onClick={() => {
+              confirm({ closeDropdown: false });
+            }}
+          >
+            Ok
+          </Button>
+          <Button
+            onClick={() => {
+              if (!clearFilters) return;
+              handleReset(clearFilters)
+              confirm({ closeDropdown: true });
+            }}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+  });
 
   const onEdit = (record: SCHEMA.HomeData) => {
     navigate(`/home-management/edit/${record.id}`);
