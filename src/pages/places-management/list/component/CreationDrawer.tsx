@@ -123,12 +123,9 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
             },
             {
               type: 'number',
-              message: 'Giá trị phải là số',
-            },
-            {
               max: 180,
               min: -180,
-              message: 'Giá trị nằm trong khoảng -180 đến 180',
+              message: 'Giá trị phải là số và trong khoảng -180 đến 180',
             }
           ]}>
           <InputNumber className='w-full' placeholder='Nhập longitude' />
@@ -144,12 +141,9 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
             },
             {
               type: 'number',
-              message: 'Giá trị phải là số',
-            },
-            {
               max: 90,
               min: -90,
-              message: 'Giá trị nằm trong khoảng -90 đến 90',
+              message: 'Giá trị phải là số và trong khoảng -90 đến 90',
             }
           ]}>
           <Input className='w-full' placeholder='Nhập latitude' />
