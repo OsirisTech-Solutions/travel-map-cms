@@ -146,7 +146,7 @@ const CreationDrawer: React.FC<CreationDrawerProps> = ({
               message: 'Giá trị phải là số và trong khoảng -90 đến 90',
             }
           ]}>
-          <Input className='w-full' placeholder='Nhập latitude' />
+          <InputNumber className='w-full' placeholder='Nhập latitude' />
         </Form.Item>
       </div>
         <Form.Item
