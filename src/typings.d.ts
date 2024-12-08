@@ -148,6 +148,17 @@ declare module SCHEMA {
     updatedAt: string;
     username: string;
   }
+
+  export interface Product {
+    createdAt: string;
+    description: string;
+    id: string;
+    name: string;
+    slug: string;
+    thumbnail: string;
+    updatedAt: string;
+  }
+
   export interface Category {
     createdAt: string;
     description: string;

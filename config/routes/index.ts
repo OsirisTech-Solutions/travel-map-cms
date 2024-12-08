@@ -1,10 +1,13 @@
+import home from './home';
 import places from './places';
+import products from './products';
 import tourism from './tourism';
 import user from './user';
-import home from './home';
+
 export default {
   places,
   tourism,
   user,
-  home
+  home,
+  products,
 };
