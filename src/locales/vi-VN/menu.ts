@@ -16,6 +16,8 @@ export default {
   'menu.home-management.list': 'Danh sách',
   'menu.home-management.create': 'Tạo mới',
   'menu.home-management.edit': 'Chỉnh sửa',
+  'menu.product-management': 'Quản lý sản phẩm',
+  'menu.product-management.list': 'Danh sách đặc sản',
   'menu.places-management': 'Quản lý địa danh',
   'menu.places-management.list': 'Danh sách',
   'menu.user-management': 'Quản lý người dùng',
